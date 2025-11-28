@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SIRIUS</title>
+
+<!-- icons -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<style>
+  /* Z-layer plan (low -> high):
+     0 canvas (stars)
+     1 nebula
+     2 star elements (shooting)
+     10 main content (h1)
+     20 overlay (dim, closes sidebar)
+     30 sidebar (must cover main when open)
+     40 menu button
+  */
+
+  :root{--sidebar-w:250px}
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,-apple-system;background:#050814;color:#dfe7ff;overflow:hidden}
+  /* Background layers */
+  canvas#stars{position:fixed;inset:0;z-index:0;display:block}
+  .nebula{position:fixed;inset:0;z-index:1;mix-blend-mode:screen;opacity:.36;pointer-events:none;
+    background:
+      radial-gradient(circle at 15% 25%, rgba(79,43,143,0.48), transparent 20%),
+      radial-gradient(circle at 70% 75%, rgba(11,60,120,0.36), transparent 25%);
+    filter: blur(60px);
+  }
+  .shooting{position:fixed;z-index:2;pointer-events:none;mix-blend-mode:screen;filter:blur(1px)}
+
+  /* Sidebar */
+  .sidebar{
+    position:fixed;left:0;top:0;width:var(--sidebar-w);height:100%;
+    padding:18px;background:rgba(12,18,36,0.92);backdrop-filter:blur(10px);
+    border-right:1px solid rgba(255,255,255,0.05);
+    z-index:30;transition:transform .28s ease;
+  }
+  .brand{display:flex;align-items:center;gap:10px;color:#fff;margin-bottom:22px}
+  nav a{display:flex;align-items:center;gap:10px;color:#dbe4ff;text-decoration:none;padding:8px;border-radius:8px}
+  nav a:hover{background:rgba(255,255,255,0.03)}
+  .line{height:1px;background:rgba(255,255,255,0.04);margin:14px 0}
+
+  /* settings dropdown inside sidebar */
+  .settings {
+    margin-top:10px;
+  }
+  .settings-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:8px;color:#dbe4ff}
+  .settings-menu{margin-top:8px;padding:6px 6px;display:none;background:transparent}
+  .settings-menu .opt{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:6px;color:#eaf0ff}
+  .settings-menu .opt:hover{background:rgba(255,255,255,0.03)}
+
+  /* Main content */
+  main{position:relative;z-index:10;height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;margin-left:var(--sidebar-w);text-align:center}
+  h1{font-size:42px;margin:0;text-shadow:0 0 18px rgba(141,182,255,0.35)}
+
+  /* Overlay and menu button */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:20;display:none}
+  .overlay.show{display:block}
+  .menu{position:fixed;right:16px;top:16px;z-index:40;width:44px;height:44px;border-radius:50%;background:#0c1224;display:none;align-items:center;justify-content:center;cursor:pointer}
+  .menu ion-icon{color:#fff}
+  @media(max-width:900px){
+    .menu{display:flex}
+    .sidebar{transform:translateX(-260px)}
+    .sidebar.open{transform:translateX(0)}
+    main{margin-left:0}
+  }
+
+  /* small button look */
+  .btn{padding:8px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#eaf0ff;cursor:pointer}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="nebula" aria-hidden="true"></div>
+
+<!-- shooting stars container (DOM elements created dynamically and use .shooting) -->
+<div id="shooting-root" aria-hidden="true"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar" aria-hidden="false">
+  <div class="brand"><ion-icon name="grid-outline" style="font-size:24px;color:#9bbcff"></ion-icon><strong>SIRIUS</strong></div>
+
+  <nav aria-label="Principal">
+    <a href="#"><ion-icon name="home-outline"></ion-icon><span>INICIO</span></a>
+    <a href="#"><ion-icon name="barbell-outline"></ion-icon><span>SOBRE NOSOTROS</span></a>
+    <a href="#"><ion-icon name="stats-chart-outline"></ion-icon><span>SERVICIOS</span></a>
+    <a href="#"><ion-icon name="calendar-outline"></ion-icon><span>CONTACTOS</span></a>
+
+    <div class="line" role="separator"></div>
+
+    <div class="settings" id="settings">
+      <div class="settings-toggle" id="settings-toggle" role="button" aria-expanded="false">
+        <ion-icon name="settings-outline"></ion-icon><span>AJUSTES</span>
+      </div>
+      <div class="settings-menu" id="settings-menu" aria-hidden="true">
+        <div class="opt">
+          <span>Detener animación</span>
+          <button class="btn" id="btn-animation" aria-pressed="false">Stop</button>
+        </div>
+        <div class="opt" style="margin-top:6px">
+          <span>Quitar sonidos</span>
+          <button class="btn" id="btn-sound" aria-pressed="false">Mute</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+</aside>
+
+<!-- menu button (mobile) -->
+<div class="menu" id="btn-menu" aria-label="Abrir menú" role="button" tabindex="0"><ion-icon name="menu-outline"></ion-icon></div>
+
+<!-- overlay -->
+<div id="overlay" class="overlay" aria-hidden="true"></div>
+
+<main id="main" role="main">
+  <h1>Donde las ideas brillan</h1>
+</main>
+
+<script>
+/* -------------------------
+   Minimal stars + shooting
+   - organized z-layers so sidebar can cover main.
+   - plays tiny twinkle via WebAudio when twinkle occurs unless muted.
+   ------------------------- */
+(function(){
+  const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
+  const rootShoot = document.getElementById('shooting-root');
+
+  let W=0,H=0,stars=[],raf=0,last=0,mouseX=0,mouseY=0;
+  const COUNT = 350;
+  let running = true;
+  let audioEnabled = true;
+  let audioCtx = null;
+
+  function resize(){
+    W = canvas.width = Math.round(innerWidth * devicePixelRatio);
+    H = canvas.height = Math.round(innerHeight * devicePixelRatio);
+    canvas.style.width = innerWidth+'px';
+    canvas.style.height = innerHeight+'px';
+    gen();
+  }
+
+  function gen(){
+    stars = [];
+    for(let i=0;i<COUNT;i++){
+      stars.push({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        z: 1 + Math.floor(Math.random()*3),
+        s: Math.random()*1.8 + 0.3,
+        base: 0.4 + Math.random()*0.6,
+        alpha: 0,
+        tw: false,
+        twPhase: Math.random()*Math.PI*2,
+        v: 0.02 + Math.random()*0.18
+      });
+    }
+  }
+
+  function playTwinkle(){
+    if(!audioEnabled) return;
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.value = 800 + Math.random()*600;
+    g.gain.value = 0.0025;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+    o.stop(audioCtx.currentTime + 0.09);
+  }
+
+  function createShooting(){
+    if(!running) return;
+    const el = document.createElement('div');
+    el.className = 'shooting';
+    const startX = Math.random()*innerWidth*0.9 + 10;
+    const startY = Math.random()*innerHeight*0.35 + 10;
+    const len = 300 + Math.random()*500;
+    el.style.left = startX + 'px';
+    el.style.top = startY + 'px';
+    el.style.width = '2px';
+    el.style.height = '2px';
+    el.style.background = 'linear-gradient(90deg,#fff,rgba(255,255,255,0))';
+    el.style.transform = 'rotate(-25deg)';
+    el.style.boxShadow = '0 0 12px 2px rgba(255,255,255,0.8)';
+    el.style.zIndex = 2;
+    rootShoot.appendChild(el);
+    // animate using simple CSS animation via JS
+    el.animate([
+      { transform: 'translateX(0) translateY(0) rotate(-25deg)', opacity: 1 },
+      { transform: `translateX(${len}px) translateY(${len*0.18}px) rotate(-25deg)`, opacity: 0 }
+    ], { duration: 700 + Math.random()*900, easing:'cubic-bezier(.2,.8,.2,1)' }).onfinish = () => el.remove();
+    // small sound for shooting
+    playTwinkle();
+  }
+
+  function draw(t){
+    if(!running) return;
+    if(!last) last = t;
+    const dt = Math.min(50, t - last)/1000;
+    last = t;
+    ctx.clearRect(0,0,W,H);
+    for(const s of stars){
+      const speed = s.v * (s.z/3) * 60 * dt;
+      s.x -= speed * 60 * 0.016;
+      if(s.x < -10) s.x = W + 10;
+      // random twinkle start
+      if(!s.tw && Math.random() < 0.007) { s.tw = true; s.twPhase = 0; playTwinkle(); }
+      if(s.tw){
+        s.twPhase += dt * (1 + Math.random()*3);
+        s.alpha = s.base + Math.sin(s.twPhase*6) * 0.6;
+        if(s.twPhase > 1.6 + Math.random()*2) { s.tw = false; s.alpha = s.base; }
+      } else {
+        s.alpha = s.base + Math.sin((t/1000 + s.s)*0.2 + s.twPhase) * 0.06;
+      }
+      const px = s.x + (mouseX - innerWidth/2) * 0.02 * (s.z/3);
+      const py = s.y + (mouseY - innerHeight/2) * 0.02 * (s.z/3);
+      const radius = Math.max(0.2, s.s * devicePixelRatio);
+      const grd = ctx.createRadialGradient(px,py,0,px,py,radius*4);
+      grd.addColorStop(0, `rgba(255,255,255,${Math.min(1,s.alpha)})`);
+      grd.addColorStop(0.4, `rgba(200,220,255,${Math.min(0.6,s.alpha*0.7)})`);
+      grd.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.arc(px,py, radius*4, 0, Math.PI*2); ctx.fill();
+    }
+    if(Math.random() < 0.0025) createShooting();
+    raf = requestAnimationFrame(draw);
+  }
+
+  // public control
+  window.STAR_BG = {
+    stop(){ running = false; cancelAnimationFrame(raf); ctx.clearRect(0,0,W,H); last = 0; rootShoot.querySelectorAll('.shooting').forEach(n=>n.remove()); },
+    start(){ if(running) return; running = true; last = 0; gen(); raf = requestAnimationFrame(draw); },
+    toggleSound(on){ audioEnabled = !!on; if(!audioEnabled && audioCtx) { try{ audioCtx.close(); }catch(e){} audioCtx = null; } }
+  };
+
+  window.addEventListener('resize', () => { clearTimeout(window._rsz); window._rsz = setTimeout(resize,150); });
+  window.addEventListener('mousemove', e=>{ mouseX = e.clientX; mouseY = e.clientY; });
+  resize(); raf = requestAnimationFrame(draw);
+})();
+
+/* -------------------------
+   Sidebar behaviour + settings dropdown
+   - overlay and Escape close sidebar
+   - settings menu with two toggles:
+       - Detener animación  -> calls window.STAR_BG.stop/start
+       - Quitar sonidos      -> toggles audioEnabled via STAR_BG.toggleSound()
+   ------------------------- */
+(function(){
+  const sidebar = document.getElementById('sidebar');
+  const btnMenu = document.getElementById('btn-menu');
+  const overlay = document.getElementById('overlay');
+  const settingsToggle = document.getElementById('settings-toggle');
+  const settingsMenu = document.getElementById('settings-menu');
+  const btnAnim = document.getElementById('btn-animation');
+  const btnSound = document.getElementById('btn-sound');
+
+  function openSidebar(){ sidebar.classList.add('open'); overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false'); }
+  function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); }
+
+  // mobile menu button
+  if(btnMenu){
+    btnMenu.addEventListener('click', e => { e.stopPropagation(); sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+  }
+
+  // overlay closes sidebar
+  overlay.addEventListener('click', closeSidebar);
+
+  // Escape closes sidebar
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSidebar(); });
+
+  // settings dropdown toggle (inside sidebar)
+  settingsToggle.addEventListener('click', e => {
+    const opened = settingsMenu.style.display === 'block';
+    settingsMenu.style.display = opened ? 'none' : 'block';
+    settingsToggle.setAttribute('aria-expanded', String(!opened));
+    settingsMenu.setAttribute('aria-hidden', String(opened));
+    e.stopPropagation();
+  });
+
+  // prevent sidebar closing when clicking inside it
+  sidebar.addEventListener('click', e => e.stopPropagation());
+
+  // click outside sidebar closes (for desktop)
+  document.addEventListener('click', e => {
+    if(window.innerWidth > 900){
+      // keep sidebar visible on desktop (it's persistent), but if settings menu open and click outside it, close settings menu
+      if(settingsMenu.style.display === 'block' && !settingsMenu.contains(e.target) && !settingsToggle.contains(e.target)){
+        settingsMenu.style.display = 'none';
+        settingsToggle.setAttribute('aria-expanded','false');
+        settingsMenu.setAttribute('aria-hidden','true');
+      }
+      return;
+    }
+    // mobile: clicking outside should close
+    if(sidebar.classList.contains('open') && !sidebar.contains(e.target) && !btnMenu.contains(e.target)){
+      closeSidebar();
+    }
+  });
+
+  // animation toggle
+  let animRunning = true;
+  btnAnim.addEventListener('click', e => {
+    animRunning = !animRunning;
+    btnAnim.textContent = animRunning ? 'Stop' : 'Start';
+    btnAnim.setAttribute('aria-pressed', String(!animRunning));
+    if(animRunning) window.STAR_BG.start(); else window.STAR_BG.stop();
+    e.stopPropagation();
+  });
+
+  // sound toggle
+  let soundOn = true;
+  btnSound.addEventListener('click', e => {
+    soundOn = !soundOn;
+    btnSound.textContent = soundOn ? 'Mute' : 'Unmute';
+    btnSound.setAttribute('aria-pressed', String(!soundOn));
+    window.STAR_BG.toggleSound(soundOn);
+    e.stopPropagation();
+  });
+
+})();
+</script>
+</body>
+</html>
