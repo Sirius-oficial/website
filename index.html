@@ -86,30 +86,30 @@
 <aside class="sidebar" id="sidebar" aria-hidden="false">
   <div class="brand"><ion-icon name="grid-outline" style="font-size:24px;color:#9bbcff"></ion-icon><strong>SIRIUS</strong></div>
 
-  <nav aria-label="Principal">
-    <a href="#"><ion-icon name="home-outline"></ion-icon><span>INICIO</span></a>
-    <a href="sobre_nosostros.html"><ion-icon name="👥"></ion-icon><span>SOBRE NOSOTROS</span></a>
-    <a href="#"><ion-icon name="stats-chart-outline"></ion-icon><span>SERVICIOS</span></a>
-    <a href="#"><ion-icon name="calendar-outline"></ion-icon><span>CONTACTOS</span></a>
+<nav aria-label="Principal">
+  <a href="index.html"><ion-icon name="home-outline"></ion-icon><span>INICIO</span></a>
+  <a href="sobre_nosostros.html"><ion-icon name="people-outline"></ion-icon><span>SOBRE NOSOTROS</span></a>
+  <a href="servicios.html"><ion-icon name="stats-chart-outline"></ion-icon><span>SERVICIOS</span></a>
+  <a href="contacto.html"><ion-icon name="mail-outline"></ion-icon><span>CONTACTOS</span></a>
 
-    <div class="line" role="separator"></div>
+  <div class="line" role="separator"></div>
 
-    <div class="settings" id="settings">
-      <div class="settings-toggle" id="settings-toggle" role="button" aria-expanded="false">
-        <ion-icon name="settings-outline"></ion-icon><span>AJUSTES</span>
+  <div class="settings" id="settings">
+    <div class="settings-toggle" id="settings-toggle" role="button" aria-expanded="false">
+      <ion-icon name="settings-outline"></ion-icon><span>AJUSTES</span>
+    </div>
+    <div class="settings-menu" id="settings-menu" aria-hidden="true">
+      <div class="opt">
+        <span>Detener animación</span>
+        <button class="btn" id="btn-animation" aria-pressed="false">Stop</button>
       </div>
-      <div class="settings-menu" id="settings-menu" aria-hidden="true">
-        <div class="opt">
-          <span>Detener animación</span>
-          <button class="btn" id="btn-animation" aria-pressed="false">Stop</button>
-        </div>
-        <div class="opt" style="margin-top:6px">
-          <span>Quitar sonidos</span>
-          <button class="btn" id="btn-sound" aria-pressed="false">Mute</button>
-        </div>
+      <div class="opt" style="margin-top:6px">
+        <span>Quitar sonidos</span>
+        <button class="btn" id="btn-sound" aria-pressed="false">Mute</button>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 </aside>
 
 <!-- menu button (mobile) -->
@@ -329,4 +329,5 @@
 })();
 </script>
 </body>
+
 </html>
