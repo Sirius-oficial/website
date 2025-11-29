@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto - Sirius Diseño Web</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.7;
+    }
+
+    .logo {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffeb3b;
+      color: #000;
+      padding: 10px 25px;
+      border-radius: 50px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      z-index: 10;
+    }
+
+    .menu-btn {
+      position: absolute;
+      top: 35px;
+      right: 30px;
+      background: #ffeb3b;
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin: 120px 0 4rem;
+      color: #fff;
+      text-align: center;
+    }
+
+    .contact-container {
+      max-width: 900px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      margin-top: 3rem;
+    }
+
+    .left, .right { display: flex; flex-direction: column; gap: 2.5rem; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .contact-item i {
+      color: #ffeb3b;
+      font-size: 1.4rem;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      color: #aaa;
+      margin-bottom: 0.5rem;
+    }
+
+    .quick-consult {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      margin-top: 1rem;
+    }
+
+    .quick-consult h3 {
+      font-size: 1.35rem;
+      color: #fff;
+    }
+
+    .quick-consult hr {
+      border: none;
+      border-top: 1px solid #444;
+      width: 80px;
+    }
+
+    .quick-consult ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      font-size: 1.15rem;
+    }
+
+    @media (max-width: 768px) {
+      .contact-container {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+        text-align: center;
+      }
+
+      .logo, .menu-btn {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        transform: none;
+        margin-bottom: 2rem;
+      }
+
+      .menu-btn { margin-left: auto; margin-right: auto; }
+
+      h1 { font-size: 2.2rem; margin-top: 140px; }
+
+      .contact-item { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Sirius <sup>Diseño Web</sup></div>
+    <button class="menu-btn">
+      <i class="fas fa-bars"></i> MENÚ
+    </button>
+  </header>
+
+  <h1>CONTACTO</h1>
+
+  <div class="contact-container">
+    <!-- Columna izquierda -->
+    <div class="left">
+      <div class="contact-item">
+        <i class="fas fa-envelope"></i>
+        <div>
+          <div class="section-title">Email</div>
+          <a href="mailto:hola@siriusdiseno.com" style="color:#e0e0e0; text-decoration:none;">
+            hola@siriusdiseno.com
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <i class="fas fa-phone-alt"></i>
+        <div>
+          <div class="section-title">Teléfono</div>
+          <a href="tel:+34666123456" style="color:#e0e0e0; text-decoration:none;">
+            +34 666 123 456
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <i class="fas fa-comment-dots"></i>
+        <div>
+          <div class="section-title">¿Cómo nos conociste?</div>
+          <span style="color:#999;">Instagram • Behance • Recomendación • Google • Otro</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="right">
+      <div class="quick-consult">
+        <h3>Consultas rápidas sobre:</h3>
+        <hr>
+        <ul>
+          <li>Packaging</li>
+          <hr>
+          <li>Interfaz gráfica</li>
+          <hr>
+          <li>Mockups</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
