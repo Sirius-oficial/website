@@ -13,118 +13,22 @@
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #000;
-      color: #e0e0e0;
-      min-height: 100vh;
-      padding: 2rem 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      line-height: 1.7;
-    }
-
-    .logo {
-      position: absolute;
-      top: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #ffeb3b;
-      color: #000;
-      padding: 10px 25px;
-      border-radius: 50px;
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      z-index: 10;
-    }
-
-    h1 {
-      font-size: 2.8rem;
-      margin: 120px 0 4rem;
-      color: #fff;
-      text-align: center;
-    }
-
-    .contact-container {
-      max-width: 900px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      margin-top: 3rem;
-    }
-
-    .left, .right { display: flex; flex-direction: column; gap: 2.5rem; }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-size: 1.1rem;
-    }
-
-    .contact-item i {
-      color: #ffeb3b;
-      font-size: 1.4rem;
-    }
-
-    .section-title {
-      font-size: 1.35rem;
-      color: #aaa;
-      margin-bottom: 0.5rem;
-    }
-
-    .quick-consult {
-      display: flex;
-      flex-direction: column;
-      gap: 1.8rem;
-      margin-top: 1rem;
-    }
-
-    .quick-consult h3 {
-      font-size: 1.35rem;
-      color: #fff;
-    }
-
-    .quick-consult hr {
-      border: none;
-      border-top: 1px solid #444;
-      width: 80px;
-    }
-
-    .quick-consult ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
-      font-size: 1.15rem;
-    }
-
-    @media (max-width: 768px) {
-      .contact-container {
-        grid-template-columns: 1fr;
-        gap: 4rem;
-        text-align: center;
-      }
-
-      .logo {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        margin-bottom: 2rem;
-      }
-
-      h1 { font-size: 2.2rem; margin-top: 140px; }
-
-      .contact-item { justify-content: center; }
-    }
-
-    /* Sidebar + overlay + menu (mobile) - basada en index.html */
     :root{--sidebar-w:250px}
+    html,body{height:100%;margin:0;font-family:Poppins,system-ui,Roboto,-apple-system;background:#000;color:#e0e0e0}
+    main{position:relative;z-index:10;padding:2rem 1rem;margin-left:var(--sidebar-w);min-height:100vh}
+    @media(max-width:900px){ main{margin-left:0} }
+
+    /* Background layers (same look/stack as index) */
+    canvas#stars{position:fixed;inset:0;z-index:0;display:block}
+    .nebula{position:fixed;inset:0;z-index:1;mix-blend-mode:screen;opacity:.36;pointer-events:none;
+      background:
+        radial-gradient(circle at 15% 25%, rgba(79,43,143,0.48), transparent 20%),
+        radial-gradient(circle at 70% 75%, rgba(11,60,120,0.36), transparent 25%);
+      filter: blur(60px);
+    }
+    .shooting{position:fixed;z-index:2;pointer-events:none;mix-blend-mode:screen;filter:blur(1px)}
+
+    /* Sidebar */
     .sidebar{
       position:fixed;left:0;top:0;width:var(--sidebar-w);height:100%;
       padding:18px;background:rgba(12,18,36,0.96);backdrop-filter:blur(8px);
@@ -146,18 +50,25 @@
     .overlay.show{display:block}
     .menu{position:fixed;right:16px;top:16px;z-index:1100;width:44px;height:44px;border-radius:50%;background:#0c1224;display:flex;align-items:center;justify-content:center;cursor:pointer}
     .menu ion-icon{color:#fff}
-    @media(min-width:901px){
-      .sidebar{transform:translateX(0)}
-      .menu{display:none}
-      main{margin-left:var(--sidebar-w)}
-    }
+    @media(min-width:901px){ .sidebar{transform:translateX(0)} .menu{display:none} }
+
+    /* Page content */
+    .logo { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); background: #ffeb3b; color: #000; padding: 10px 25px; border-radius: 50px; font-size: 1.1rem; font-weight: 600; z-index:1100 }
+    h1 { font-size: 2rem; margin-top: 56px; text-align:center; color:#fff }
+    .contact-container { max-width:900px; margin: 2rem auto; display:grid; grid-template-columns:1fr 1fr; gap:3rem }
+    .contact-item{display:flex;align-items:center;gap:1rem}
+    .contact-item i{color:#ffeb3b}
+    @media(max-width:768px){ .contact-container{grid-template-columns:1fr} .logo{position:relative;margin-bottom:1rem} h1{margin-top:1rem} }
 
     .btn{padding:8px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#eaf0ff;cursor:pointer}
   </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
+  <canvas id="stars"></canvas>
+  <div class="nebula" aria-hidden="true"></div>
+  <div id="shooting-root" aria-hidden="true"></div>
+
   <aside class="sidebar" id="sidebar" aria-hidden="false">
     <div class="brand"><ion-icon name="grid-outline" style="font-size:24px;color:#9bbcff"></ion-icon><strong>SIRIUS</strong></div>
 
@@ -187,116 +98,228 @@
     </nav>
   </aside>
 
-  <!-- menu (mobile) -->
   <div class="menu" id="btn-menu" aria-label="Abrir menú" role="button" tabindex="0"><ion-icon name="menu-outline"></ion-icon></div>
-
-  <!-- overlay -->
   <div id="overlay" class="overlay" aria-hidden="true"></div>
 
-  <header>
+  <main id="main" role="main">
     <div class="logo">Sirius <sup>Diseño Web</sup></div>
-  </header>
 
-  <h1>CONTACTO</h1>
+    <h1>CONTACTO</h1>
 
-  <div class="contact-container">
-    <!-- Columna izquierda -->
-    <div class="left">
-      <div class="contact-item">
-        <i class="fas fa-envelope"></i>
-        <div>
-          <div class="section-title">Email</div>
-          <a href="mailto:hola@siriusdiseno.com" style="color:#e0e0e0; text-decoration:none;">
-            hola@siriusdiseno.com
-          </a>
+    <div class="contact-container" aria-live="polite">
+      <div>
+        <div class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <div>
+            <div style="color:#aaa;font-size:.95rem">Email</div>
+            <a href="mailto:hola@siriusdiseno.com" style="color:#e0e0e0; text-decoration:none;">hola@siriusdiseno.com</a>
+          </div>
+        </div>
+
+        <div class="contact-item" style="margin-top:1rem">
+          <i class="fas fa-phone-alt"></i>
+          <div>
+            <div style="color:#aaa;font-size:.95rem">Teléfono</div>
+            <a href="tel:+34666123456" style="color:#e0e0e0; text-decoration:none;">+34 666 123 456</a>
+          </div>
         </div>
       </div>
 
-      <div class="contact-item">
-        <i class="fas fa-phone-alt"></i>
-        <div>
-          <div class="section-title">Teléfono</div>
-          <a href="tel:+34666123456" style="color:#e0e0e0; text-decoration:none;">
-            +34 666 123 456
-          </a>
-        </div>
-      </div>
-
-      <div class="contact-item">
-        <i class="fas fa-comment-dots"></i>
-        <div>
-          <div class="section-title">¿Cómo nos conociste?</div>
-          <span style="color:#999;">Instagram • Behance • Recomendación • Google • Otro</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Columna derecha -->
-    <div class="right">
-      <div class="quick-consult">
-        <h3>Consultas rápidas sobre:</h3>
-        <hr>
-        <ul>
-          <li>Packaging</li>
-          <hr>
-          <li>Interfaz gráfica</li>
-          <hr>
-          <li>Mockups</li>
+      <div>
+        <div style="color:#aaa;margin-bottom:.5rem">Consultas rápidas</div>
+        <ul style="list-style:none;padding-left:0;color:#ddd">
+          <li>Packaging</li><li>Interfaz gráfica</li><li>Mockups</li>
         </ul>
       </div>
     </div>
-  </div>
+  </main>
 
   <script>
-    (function(){
-      const sidebar = document.getElementById('sidebar');
-      const btnMenu = document.getElementById('btn-menu');
-      const overlay = document.getElementById('overlay');
-      const settingsToggle = document.getElementById('settings-toggle');
-      const settingsMenu = document.getElementById('settings-menu');
-      const btnAnim = document.getElementById('btn-animation');
-      const btnSound = document.getElementById('btn-sound');
+  /* Star background + shooting (copied/adjusted from index) */
+  (function(){
+    const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
+    const rootShoot = document.getElementById('shooting-root');
 
-      function openSidebar(){ sidebar.classList.add('open'); overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false'); }
-      function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); }
+    let W=0,H=0,stars=[],raf=0,last=0,mouseX=0,mouseY=0;
+    const COUNT = 350;
+    let running = true;
+    let audioEnabled = true;
+    let audioCtx = null;
 
-      if(btnMenu){
-        btnMenu.addEventListener('click', e => { e.stopPropagation(); sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+    function resize(){
+      W = canvas.width = Math.round(innerWidth * devicePixelRatio);
+      H = canvas.height = Math.round(innerHeight * devicePixelRatio);
+      canvas.style.width = innerWidth+'px';
+      canvas.style.height = innerHeight+'px';
+      gen();
+    }
+
+    function gen(){
+      stars = [];
+      for(let i=0;i<COUNT;i++){
+        stars.push({
+          x: Math.random()*W,
+          y: Math.random()*H,
+          z: 1 + Math.floor(Math.random()*3),
+          s: Math.random()*1.8 + 0.3,
+          base: 0.4 + Math.random()*0.6,
+          alpha: 0,
+          tw: false,
+          twPhase: Math.random()*Math.PI*2,
+          v: 0.02 + Math.random()*0.18
+        });
       }
+    }
 
-      overlay.addEventListener('click', closeSidebar);
-      document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSidebar(); });
+    function playTwinkle(){
+      if(!audioEnabled) return;
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.value = 800 + Math.random()*600;
+      g.gain.value = 0.0025;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+      o.stop(audioCtx.currentTime + 0.09);
+    }
 
-      settingsToggle.addEventListener('click', e => {
-        const opened = settingsMenu.style.display === 'block';
-        settingsMenu.style.display = opened ? 'none' : 'block';
-        settingsToggle.setAttribute('aria-expanded', String(!opened));
-        settingsMenu.setAttribute('aria-hidden', String(opened));
+    function createShooting(){
+      if(!running) return;
+      const el = document.createElement('div');
+      el.className = 'shooting';
+      const startX = Math.random()*innerWidth*0.9 + 10;
+      const startY = Math.random()*innerHeight*0.35 + 10;
+      const len = 300 + Math.random()*500;
+      el.style.left = startX + 'px';
+      el.style.top = startY + 'px';
+      el.style.width = '2px';
+      el.style.height = '2px';
+      el.style.background = 'linear-gradient(90deg,#fff,rgba(255,255,255,0))';
+      el.style.transform = 'rotate(-25deg)';
+      el.style.boxShadow = '0 0 12px 2px rgba(255,255,255,0.8)';
+      el.style.zIndex = 2;
+      rootShoot.appendChild(el);
+      el.animate([
+        { transform: 'translateX(0) translateY(0) rotate(-25deg)', opacity: 1 },
+        { transform: `translateX(${len}px) translateY(${len*0.18}px) rotate(-25deg)`, opacity: 0 }
+      ], { duration: 700 + Math.random()*900, easing:'cubic-bezier(.2,.8,.2,1)' }).onfinish = () => el.remove();
+      playTwinkle();
+    }
+
+    function draw(t){
+      if(!running) return;
+      if(!last) last = t;
+      const dt = Math.min(50, t - last)/1000;
+      last = t;
+      ctx.clearRect(0,0,W,H);
+      for(const s of stars){
+        const speed = s.v * (s.z/3) * 60 * dt;
+        s.x -= speed * 60 * 0.016;
+        if(s.x < -10) s.x = W + 10;
+        if(!s.tw && Math.random() < 0.007) { s.tw = true; s.twPhase = 0; playTwinkle(); }
+        if(s.tw){
+          s.twPhase += dt * (1 + Math.random()*3);
+          s.alpha = s.base + Math.sin(s.twPhase*6) * 0.6;
+          if(s.twPhase > 1.6 + Math.random()*2) { s.tw = false; s.alpha = s.base; }
+        } else {
+          s.alpha = s.base + Math.sin((t/1000 + s.s)*0.2 + s.twPhase) * 0.06;
+        }
+        const px = s.x + (mouseX - innerWidth/2) * 0.02 * (s.z/3);
+        const py = s.y + (mouseY - innerHeight/2) * 0.02 * (s.z/3);
+        const radius = Math.max(0.2, s.s * devicePixelRatio);
+        const grd = ctx.createRadialGradient(px,py,0,px,py,radius*4);
+        grd.addColorStop(0, `rgba(255,255,255,${Math.min(1,s.alpha)})`);
+        grd.addColorStop(0.4, `rgba(200,220,255,${Math.min(0.6,s.alpha*0.7)})`);
+        grd.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grd;
+        ctx.beginPath(); ctx.arc(px,py, radius*4, 0, Math.PI*2); ctx.fill();
+      }
+      if(Math.random() < 0.0025) createShooting();
+      raf = requestAnimationFrame(draw);
+    }
+
+    window.STAR_BG = {
+      stop(){ running = false; cancelAnimationFrame(raf); ctx.clearRect(0,0,W,H); last = 0; rootShoot.querySelectorAll('.shooting').forEach(n=>n.remove()); },
+      start(){ if(running) return; running = true; last = 0; gen(); raf = requestAnimationFrame(draw); },
+      toggleSound(on){ audioEnabled = !!on; if(!audioEnabled && audioCtx) { try{ audioCtx.close(); }catch(e){} audioCtx = null; } }
+    };
+
+    window.addEventListener('resize', () => { clearTimeout(window._rsz); window._rsz = setTimeout(resize,150); });
+    window.addEventListener('mousemove', e=>{ mouseX = e.clientX; mouseY = e.clientY; });
+    resize(); raf = requestAnimationFrame(draw);
+  })();
+  </script>
+
+  <script>
+  /* Sidebar behavior + settings wiring (keeps contact buttons clickable) */
+  (function(){
+    const sidebar = document.getElementById('sidebar');
+    const btnMenu = document.getElementById('btn-menu');
+    const overlay = document.getElementById('overlay');
+    const settingsToggle = document.getElementById('settings-toggle');
+    const settingsMenu = document.getElementById('settings-menu');
+    const btnAnim = document.getElementById('btn-animation');
+    const btnSound = document.getElementById('btn-sound');
+
+    function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); }
+    function openSidebar(){ sidebar.classList.add('open'); overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false'); }
+
+    if(btnMenu){
+      btnMenu.addEventListener('click', e => { e.stopPropagation(); sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+    }
+
+    overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSidebar(); });
+
+    settingsToggle.addEventListener('click', e => {
+      const opened = settingsMenu.style.display === 'block';
+      settingsMenu.style.display = opened ? 'none' : 'block';
+      settingsToggle.setAttribute('aria-expanded', String(!opened));
+      settingsMenu.setAttribute('aria-hidden', String(opened));
+      e.stopPropagation();
+    });
+
+    sidebar.addEventListener('click', e => e.stopPropagation());
+
+    document.addEventListener('click', e => {
+      if(window.innerWidth > 900){
+        if(settingsMenu.style.display === 'block' && !settingsMenu.contains(e.target) && !settingsToggle.contains(e.target)){
+          settingsMenu.style.display = 'none';
+          settingsToggle.setAttribute('aria-expanded','false');
+          settingsMenu.setAttribute('aria-hidden','true');
+        }
+        return;
+      }
+      if(sidebar.classList.contains('open') && !sidebar.contains(e.target) && !btnMenu.contains(e.target)){
+        closeSidebar();
+      }
+    });
+
+    // Connect controls to STAR_BG so animation/sound toggles affect the canvas
+    let animRunning = true;
+    if(btnAnim){
+      btnAnim.addEventListener('click', e => {
+        animRunning = !animRunning;
+        btnAnim.textContent = animRunning ? 'Stop' : 'Start';
+        btnAnim.setAttribute('aria-pressed', String(!animRunning));
+        if(animRunning) window.STAR_BG.start(); else window.STAR_BG.stop();
         e.stopPropagation();
       });
+    }
 
-      sidebar.addEventListener('click', e => e.stopPropagation());
-
-      document.addEventListener('click', e => {
-        if(window.innerWidth > 900){
-          if(settingsMenu.style.display === 'block' && !settingsMenu.contains(e.target) && !settingsToggle.contains(e.target)){
-            settingsMenu.style.display = 'none';
-            settingsToggle.setAttribute('aria-expanded','false');
-            settingsMenu.setAttribute('aria-hidden','true');
-          }
-          return;
-        }
-        if(sidebar.classList.contains('open') && !sidebar.contains(e.target) && !btnMenu.contains(e.target)){
-          closeSidebar();
-        }
+    let soundOn = true;
+    if(btnSound){
+      btnSound.addEventListener('click', e => {
+        soundOn = !soundOn;
+        btnSound.textContent = soundOn ? 'Mute' : 'Unmute';
+        btnSound.setAttribute('aria-pressed', String(!soundOn));
+        window.STAR_BG.toggleSound(soundOn);
+        e.stopPropagation();
       });
-
-      let animRunning = true;
-      btnAnim && btnAnim.addEventListener('click', e => { animRunning = !animRunning; btnAnim.textContent = animRunning ? 'Stop' : 'Start'; btnAnim.setAttribute('aria-pressed', String(!animRunning)); e.stopPropagation(); });
-      let soundOn = true;
-      btnSound && btnSound.addEventListener('click', e => { soundOn = !soundOn; btnSound.textContent = soundOn ? 'Mute' : 'Unmute'; btnSound.setAttribute('aria-pressed', String(!soundOn)); e.stopPropagation(); });
-
-    })();
+    }
+  })();
   </script>
 </body>
 </html>
