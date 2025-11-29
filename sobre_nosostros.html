@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre Mí - Sirius Diseño Web</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      line-height: 1.7;
+    }
+
+    .logo {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffeb3b;
+      color: #000;
+      padding: 10px 25px;
+      border-radius: 50px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .menu-btn {
+      position: absolute;
+      top: 35px;
+      right: 30px;
+      background: #ffeb3b;
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 3rem;
+      color: #fff;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5rem;
+      max-width: 1100px;
+      flex-wrap: wrap;
+    }
+
+    .text {
+      flex: 1;
+      min-width: 300px;
+      font-size: 1.15rem;
+      max-width: 550px;
+    }
+
+    .text p {
+      margin-bottom: 1.2rem;
+    }
+
+    .image {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: radial-gradient(circle, #ffffff 30%, #333);
+      box-shadow: 0 0 80px rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+
+    .image::before {
+      content: '';
+      position: absolute;
+      inset: 15px;
+      background: url('https://i.imgur.com/5z2lZ8k.png') center/cover no-repeat;
+      border-radius: 50%;
+      background-color: #111;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        text-align: center;
+        gap: 3rem;
+      }
+
+      .logo, .menu-btn {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin-bottom: 2rem;
+      }
+
+      .menu-btn {
+        right: auto;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .image {
+        width: 260px;
+        height: 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Sirius <sup>Diseño Web</sup></div>
+    <button class="menu-btn">
+      <i class="fas fa-bars"></i> MENÚ
+    </button>
+  </header>
+
+  <h1>SOBRE MÍ</h1>
+
+  <div class="container">
+    <div class="text">
+      <p>Me presento, mi nombre es <strong>Iván Domínguez</strong> y soy un diseñador freelance.</p>
+      <p>Le guardo un aprecio increíble al cielo nocturno; ese es el motivo de utilizar el nombre de la estrella más brillante del firmamento de la “bóveda celeste”, el sitio donde se resguardan todas las estrellas.</p>
+      <p>Allí afuera habrá millones de ideas que brillarán con su propia genialidad, y por ello me gustaría asistir para que todas las ideas alcancen su máximo potencial.</p>
+    </div>
+
+    <div class="image">
+      <!-- Silueta iluminada circular -->
+    </div>
+  </div>
+
+</body>
+</html>
