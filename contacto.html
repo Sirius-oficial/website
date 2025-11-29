@@ -4,7 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contacto - Sirius Diseño Web</title>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
@@ -34,23 +38,6 @@
       font-size: 1.5rem;
       font-weight: 600;
       letter-spacing: 1px;
-      z-index: 10;
-    }
-
-    .menu-btn {
-      position: absolute;
-      top: 35px;
-      right: 30px;
-      background: #ffeb3b;
-      color: #000;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
       z-index: 10;
     }
 
@@ -123,30 +110,91 @@
         text-align: center;
       }
 
-      .logo, .menu-btn {
+      .logo {
         position: relative;
         top: auto;
         left: auto;
-        right: auto;
         transform: none;
         margin-bottom: 2rem;
       }
-
-      .menu-btn { margin-left: auto; margin-right: auto; }
 
       h1 { font-size: 2.2rem; margin-top: 140px; }
 
       .contact-item { justify-content: center; }
     }
+
+    /* Sidebar + overlay + menu (mobile) - basada en index.html */
+    :root{--sidebar-w:250px}
+    .sidebar{
+      position:fixed;left:0;top:0;width:var(--sidebar-w);height:100%;
+      padding:18px;background:rgba(12,18,36,0.96);backdrop-filter:blur(8px);
+      border-right:1px solid rgba(255,255,255,0.04);z-index:1000;transform:translateX(-260px);
+      transition:transform .28s ease;
+    }
+    .sidebar.open{transform:translateX(0)}
+    .brand{display:flex;align-items:center;gap:10px;color:#fff;margin-bottom:22px}
+    nav a{display:flex;align-items:center;gap:10px;color:#dbe4ff;text-decoration:none;padding:8px;border-radius:8px}
+    nav a:hover{background:rgba(255,255,255,0.03)}
+    .line{height:1px;background:rgba(255,255,255,0.04);margin:14px 0}
+    .settings{margin-top:10px}
+    .settings-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:8px;color:#dbe4ff}
+    .settings-menu{margin-top:8px;padding:6px 6px;display:none;background:transparent}
+    .settings-menu .opt{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:6px;color:#eaf0ff}
+    .settings-menu .opt:hover{background:rgba(255,255,255,0.03)}
+
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:900;display:none}
+    .overlay.show{display:block}
+    .menu{position:fixed;right:16px;top:16px;z-index:1100;width:44px;height:44px;border-radius:50%;background:#0c1224;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .menu ion-icon{color:#fff}
+    @media(min-width:901px){
+      .sidebar{transform:translateX(0)}
+      .menu{display:none}
+      main{margin-left:var(--sidebar-w)}
+    }
+
+    .btn{padding:8px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#eaf0ff;cursor:pointer}
   </style>
 </head>
 <body>
 
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar" aria-hidden="false">
+    <div class="brand"><ion-icon name="grid-outline" style="font-size:24px;color:#9bbcff"></ion-icon><strong>SIRIUS</strong></div>
+
+    <nav aria-label="Principal">
+      <a href="index.html"><ion-icon name="home-outline"></ion-icon><span>INICIO</span></a>
+      <a href="sobre_nosostros.html"><ion-icon name="people-outline"></ion-icon><span>SOBRE NOSOTROS</span></a>
+      <a href="servicios.html"><ion-icon name="stats-chart-outline"></ion-icon><span>SERVICIOS</span></a>
+      <a href="contacto.html"><ion-icon name="mail-outline"></ion-icon><span>CONTACTOS</span></a>
+
+      <div class="line" role="separator"></div>
+
+      <div class="settings" id="settings">
+        <div class="settings-toggle" id="settings-toggle" role="button" aria-expanded="false">
+          <ion-icon name="settings-outline"></ion-icon><span>AJUSTES</span>
+        </div>
+        <div class="settings-menu" id="settings-menu" aria-hidden="true">
+          <div class="opt">
+            <span>Detener animación</span>
+            <button class="btn" id="btn-animation" aria-pressed="false">Stop</button>
+          </div>
+          <div class="opt" style="margin-top:6px">
+            <span>Quitar sonidos</span>
+            <button class="btn" id="btn-sound" aria-pressed="false">Mute</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- menu (mobile) -->
+  <div class="menu" id="btn-menu" aria-label="Abrir menú" role="button" tabindex="0"><ion-icon name="menu-outline"></ion-icon></div>
+
+  <!-- overlay -->
+  <div id="overlay" class="overlay" aria-hidden="true"></div>
+
   <header>
     <div class="logo">Sirius <sup>Diseño Web</sup></div>
-    <button class="menu-btn">
-      <i class="fas fa-bars"></i> MENÚ
-    </button>
   </header>
 
   <h1>CONTACTO</h1>
@@ -199,5 +247,56 @@
     </div>
   </div>
 
+  <script>
+    (function(){
+      const sidebar = document.getElementById('sidebar');
+      const btnMenu = document.getElementById('btn-menu');
+      const overlay = document.getElementById('overlay');
+      const settingsToggle = document.getElementById('settings-toggle');
+      const settingsMenu = document.getElementById('settings-menu');
+      const btnAnim = document.getElementById('btn-animation');
+      const btnSound = document.getElementById('btn-sound');
+
+      function openSidebar(){ sidebar.classList.add('open'); overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false'); }
+      function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); }
+
+      if(btnMenu){
+        btnMenu.addEventListener('click', e => { e.stopPropagation(); sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+      }
+
+      overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSidebar(); });
+
+      settingsToggle.addEventListener('click', e => {
+        const opened = settingsMenu.style.display === 'block';
+        settingsMenu.style.display = opened ? 'none' : 'block';
+        settingsToggle.setAttribute('aria-expanded', String(!opened));
+        settingsMenu.setAttribute('aria-hidden', String(opened));
+        e.stopPropagation();
+      });
+
+      sidebar.addEventListener('click', e => e.stopPropagation());
+
+      document.addEventListener('click', e => {
+        if(window.innerWidth > 900){
+          if(settingsMenu.style.display === 'block' && !settingsMenu.contains(e.target) && !settingsToggle.contains(e.target)){
+            settingsMenu.style.display = 'none';
+            settingsToggle.setAttribute('aria-expanded','false');
+            settingsMenu.setAttribute('aria-hidden','true');
+          }
+          return;
+        }
+        if(sidebar.classList.contains('open') && !sidebar.contains(e.target) && !btnMenu.contains(e.target)){
+          closeSidebar();
+        }
+      });
+
+      let animRunning = true;
+      btnAnim && btnAnim.addEventListener('click', e => { animRunning = !animRunning; btnAnim.textContent = animRunning ? 'Stop' : 'Start'; btnAnim.setAttribute('aria-pressed', String(!animRunning)); e.stopPropagation(); });
+      let soundOn = true;
+      btnSound && btnSound.addEventListener('click', e => { soundOn = !soundOn; btnSound.textContent = soundOn ? 'Mute' : 'Unmute'; btnSound.setAttribute('aria-pressed', String(!soundOn)); e.stopPropagation(); });
+
+    })();
+  </script>
 </body>
 </html>
