@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servicios - Sirius Diseño Web</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--sidebar-w:260px}
+    html,body{height:100%;font-family:'Poppins',sans-serif;background:#000;color:#e0e0e0;overflow-x:hidden}
+    main{position:relative;z-index:10;margin-left:var(--sidebar-w);min-height:100vh;padding:2rem 1rem}
+    @media(max-width:900px){main{margin-left:0}}
+
+    canvas#stars{position:fixed;inset:0;z-index:0}
+    .nebula{position:fixed;inset:0;z-index:1;mix-blend-mode:screen;opacity:.36;pointer-events:none;
+      background:radial-gradient(circle at 15% 25%,rgba(79,43,143,.48),transparent 20%),
+                 radial-gradient(circle at 70% 75%,rgba(11,60,120,.36),transparent 25%);
+      filter:blur(60px)}
+
+    /* ==================== SIDEBAR MEJORADO ==================== */
+    .sidebar{position:fixed;left:0;top:0;width:var(--sidebar-w);height:100%;padding:20px;background:rgba(12,18,36,.98);backdrop-filter:blur(10px);border-right:1px solid rgba(255,255,255,.04);z-index:1000;transform:translateX(-270px);transition:transform .35s ease}
+    .sidebar.open{transform:translateX(0)}
+    @media(min-width:901px){.sidebar{transform:translateX(0)}}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:30px}
+    .brand img{width:44px;border-radius:8px}
+    nav a{display:flex;align-items:center;gap:14px;color:#dbe4ff;text-decoration:none;padding:14px 12px;border-radius:10px;position:relative;overflow:hidden;transition:all .3s ease}
+    nav a:hover{background:rgba(255,255,255,.08);color:#fff;transform:translateX(6px)}
+    nav a::after{content:"★";position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:18px;color:#ffd700;opacity:0;transition:opacity .3s}
+    nav a:hover::after{opacity:1;animation:twinkle .8s ease-in-out}
+    @keyframes twinkle{0%,100%{opacity:1;transform:translateY(-50%) scale(1)} 50%{opacity:.4;transform:translateY(-50%) scale(1.4)}}
+    .line{height:1px;background:rgba(255,255,255,.06);margin:20px 0}
+
+    .menu{position:fixed;right:16px;top:16px;z-index:1100;width:48px;height:48px;background:#0c1224;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .menu ion-icon{font-size:30px;color:#fff}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:none}
+    .overlay.show{display:block}
+    @media(min-width:901px){.menu{display:none}}
+
+    /* ==================== SCROLL HORIZONTAL ==================== */
+    .horizontal-section{padding:6rem 2rem;text-align:center}
+    .horizontal-title{font-size:4rem;color:#fff;margin-bottom:4rem;background:linear-gradient(90deg,#a8edea,#fed6e3,#a8edea);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .horizontal-wrapper{
+      height:70vh;min-height:500px;display:flex;align-items:center;overflow:hidden;position:relative
+    }
+    .horizontal-track{
+      display:flex;gap:30px;padding-left:max(50vw,400px);scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;width:max-content
+    }
+    .h-card{
+      scroll-snap-align:center;flex:0 0 380px;height:520px;background:rgba(15,20,40,.9);border-radius:20px;
+      padding:2.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      box-shadow:0 0 40px rgba(255,215,0,.15);transition:all .4s ease;position:relative;overflow:hidden
+    }
+    .h-card::before{
+      content:"";position:absolute;inset:0;background:radial-gradient(circle at top,rgba(255,215,0,.2),transparent 70%);opacity:0;transition:opacity .4s
+    }
+    .h-card:hover::before{opacity:1}
+    .h-card:hover{transform:scale(1.06);box-shadow:0 0 70px rgba(255,215,0,.4)}
+    .emoji{display:block;font-size:9rem;margin-bottom:1.5rem;filter:drop-shadow(0 0 20px rgba(255,255,255,.3))}
+    .h-card h3{font-size:1.8rem;color:#fff;margin:1rem 0}
+    .h-card p{font-size:1.1rem;color:#b0c4de;line-height:1.6;text-align:center;max-width:300px}
+
+    @media(max-width:768px){
+      .horizontal-title{font-size:2.8rem}
+      .horizontal-track{gap:20px;padding-left:20px}
+      .h-card{flex:0 0 300px;height:460px}
+      .emoji{font-size:7rem}
+      .h-card h3{font-size:1.5rem}
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="nebula"></div>
+
+<!-- SIDEBAR MEJORADO -->
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="logo.png" alt="Sirius" class="brand-logo">
+  </div>
+  <nav>
+    <a href="index.html"><ion-icon name="home-outline"></ion-icon><span>INICIO</span></a>
+    <a href="sobre_nosotros.html"><ion-icon name="people-outline"></ion-icon><span>SOBRE NOSOTROS</span></a>
+    <a href="servicios.html"><ion-icon name="create-outline"></ion-icon><span>SERVICIOS</span></a>
+    <a href="contacto.html"><ion-icon name="call-outline"></ion-icon><span>CONTACTO</span></a>
+    <div class="line"></div>
+    <div class="settings" id="settings">
+      <div class="settings-toggle" id="settings-toggle">
+        <ion-icon name="settings-outline"></ion-icon><span>AJUSTES</span>
+      </div>
+      <div class="settings-menu" id="settings-menu">
+        <div class="opt"><span>Detener estrellas</span><button class="btn" id="btn-animation">Stop</button></div>
+        <div class="opt"><span>Silenciar sonidos</span><button class="btn" id="btn-sound">Mute</button></div>
+      </div>
+    </div>
+  </nav>
+</aside>
+
+<div class="menu" id="btn-menu"><ion-icon name="menu-outline"></ion-icon></div>
+<div class="overlay" id="overlay"></div>
+
+<main>
+  <section class="horizontal-section">
+    <h2 class="horizontal-title">NUESTROS SERVICIOS</h2>
+
+    <div class="horizontal-wrapper">
+      <div class="horizontal-track" id="track">
+        <div class="h-card">
+          <span class="emoji">Websites</span>
+          <h3>Diseño Web a Medida</h3>
+          <p>Sitios únicos, rápidos y 100% responsive que brillan en cualquier dispositivo.</p>
+        </div>
+        <div class="h-card">
+          <span class="emoji">E-commerce</span>
+          <h3>Tiendas Online</h3>
+          <p>E-commerce con carrito, pagos seguros y diseño que convierte visitas en ventas.</p>
+        </div>
+        <div class="h-card">
+          <span class="emoji">Branding</span>
+          <h3>Identidad Visual</h3>
+          <p>Logos, paletas y estilo que hacen que tu marca destaque en el universo digital.</p>
+        </div>
+        <div class="h-card">
+          <span class="emoji">Mobile Apps</span>
+          <h3>Apps & PWA</h3>
+          <p>Aplicaciones progresivas que funcionan como nativas, sin instalación.</p>
+        </div>
+        <div class="h-card">
+          <span class="emoji">SEO</span>
+          <h3>Posicionamiento SEO</h3>
+          <p>Optimización para que tu web aparezca en las primeras posiciones de Google.</p>
+        </div>
+        <div class="h-card">
+          <span class="emoji">Support</span>
+          <h3>Mantenimiento</h3>
+          <p>Soporte continuo, actualizaciones y mejoras para que todo siga brillando.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Scripts (estrellas + sidebar) - los mismos que ya tenías -->
+<script>
+// (Aquí pegas exactamente los dos scripts que ya usas: el de las estrellas + el del sidebar)
+// Los incluyo completos para que funcione 100%:
+
+// Script estrellas (el mismo que tenías)
+(function(){const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');const rootShoot=document.createElement('div');document.body.appendChild(rootShoot);rootShoot.id='shooting-root';let W=0,H=0,stars=[],raf=0,last=0,mouseX=0,mouseY=0;const COUNT=350;let running=true;let audioEnabled=true;let audioCtx=null;function resize(){W=canvas.width=Math.round(innerWidth*devicePixelRatio);H=canvas.height=Math.round(innerHeight*devicePixelRatio);canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';gen()}function gen(){stars=[];for(let i=0;i<COUNT;i++){stars.push({x:Math.random()*W,y:Math.random()*H,z:1+Math.floor(Math.random()*3),s:Math.random()*1.8+0.3,base:0.4+Math.random()*0.6,alpha:0,tw:false,twPhase:Math.random()*Math.PI*2,v:0.02+Math.random()*0.18})}}function playTwinkle(){if(!audioEnabled)return;if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator();const g=audioCtx.createGain();o.type='sine';o.frequency.value=800+Math.random()*600;g.gain.value=0.0025;o.connect(g);g.connect(audioCtx.destination);o.start();g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.08);o.stop(audioCtx.currentTime+0.09)}function createShooting(){if(!running)return;const el=document.createElement('div');el.className='shooting';const startX=Math.random()*innerWidth*0.9+10;const startY=Math.random()*innerHeight*0.35+10;const len=300+Math.random()*500;el.style.left=startX+'px';el.style.top=startY+'px';el.style.width='2px';el.style.height='2px';el.style.background='linear-gradient(90deg,#fff,rgba(255,255,255,0))';el.style.transform='rotate(-25deg)';el.style.boxShadow='0 0 12px 2px rgba(255,255,255,0.8)';rootShoot.appendChild(el);el.animate([{transform:'translateX(0) translateY(0) rotate(-25deg)',opacity:1},{transform:`translateX(${len}px) translateY(${len*0.18}px) rotate(-25deg)`,opacity:0}],[{duration:700+Math.random()*900,easing:'cubic-bezier(.2,.8,.2,1)'}]).onfinish=()=>el.remove();playTwinkle()}function draw(t){if(!running)return;if(!last)last=t;const dt=Math.min(50,t-last)/1000;last=t;ctx.clearRect(0,0,W,H);for(const s of stars){const speed=s.v*(s.z/3)*60*dt;s.x-=speed*60*0.016;if(s.x<-10)s.x=W+10;if(!s.tw&&Math.random()<0.007){s.tw=true;s.twPhase=0;playTwinkle()}if(s.tw){s.twPhase+=dt*(1+Math.random()*3);s.alpha=s.base+Math.sin(s.twPhase*6)*0.6;if(s.twPhase>1.6+Math.random()*2){s.tw=false;s.alpha=s.base}}else{s.alpha=s.base+Math.sin((t/1000+s.s)*0.2+s.twPhase)*0.06}const px=s.x+(mouseX-innerWidth/2)*0.02*(s.z/3);const py=s.y+(mouseY-innerHeight/2)*0.02*(s.z/3);const radius=Math.max(0.2,s.s*devicePixelRatio);const grd=ctx.createRadialGradient(px,py,0,px,py,radius*4);grd.addColorStop(0,`rgba(255,255,255,${Math.min(1,s.alpha)})`);grd.addColorStop(0.4,`rgba(200,220,255,${Math.min(0.6,s.alpha*0.7)})`);grd.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=grd;ctx.beginPath();ctx.arc(px,py,radius*4,0,Math.PI*2);ctx.fill()}if(Math.random()<0.0025)createShooting();raf=requestAnimationFrame(draw)}window.STAR_BG={stop(){running=false;cancelAnimationFrame(raf);ctx.clearRect(0,0,W,H);last=0;rootShoot.querySelectorAll('.shooting').forEach(n=>n.remove())},start(){if(running)return;running=true;last=0;gen();raf=requestAnimationFrame(draw)},toggleSound(on){audioEnabled=!!on;if(!audioEnabled&&audioCtx){try{audioCtx.close()}catch(e){}audioCtx=null}}};window.addEventListener('resize',()=>{clearTimeout(window._rsz);window._rsz=setTimeout(resize,150)});window.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY});resize();raf=requestAnimationFrame(draw)})();
+
+// Script sidebar
+(function(){
+  const sidebar=document.getElementById('sidebar');
+  const btnMenu=document.getElementById('btn-menu');
+  const overlay=document.getElementById('overlay');
+  const settingsToggle=document.getElementById('settings-toggle');
+  const settingsMenu=document.getElementById('settings-menu');
+  const btnAnim=document.getElementById('btn-animation');
+  const btnSound=document.getElementById('btn-sound');
+
+  btnMenu.addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show')});
+  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('show')});
+
+  settingsToggle.addEventListener('click',()=>{settingsMenu.style.display=settingsMenu.style.display==='block'?'none':'block'});
+
+  let animRunning=true;
+  btnAnim&&btnAnim.addEventListener('click',()=>{animRunning=!animRunning;btnAnim.textContent=animRunning?'Stop':'Start';animRunning?window.STAR_BG.start():window.STAR_BG.stop()});
+
+  let soundOn=true;
+  btnSound&&btnSound.addEventListener('click',()=>{soundOn=!soundOn;btnSound.textContent=soundOn?'Mute':'Unmute';window.STAR_BG.toggleSound(soundOn)});
+})();
+</script>
+</body>
+</html>
