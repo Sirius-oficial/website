@@ -8,248 +8,260 @@
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
- <style>
-  /* ==================== CARRUSEL DE 3 FILAS SUPERPUESTAS ==================== */
-  .carousel-container {
+<style>
+  /* ==================== CARRUSEL DE 3 SECCIONES (ESTILO ORIGINAL MEJORADO) ==================== */
+  .services-carousel {
     position: relative;
-    width: 100%;
-    height: 480px;
-    margin: 8rem 0;
-    overflow: hidden;
+    margin: 8rem 0 10rem;
+    padding: 2rem 0;
   }
 
-  .carousel-title {
-    position: absolute;
-    top: -80px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 3rem;
-    font-weight: 700;
+  /* Título principal centrado */
+  .services-title {
+    font-size: 2.9rem;
+    text-align: center;
+    margin-bottom: 4.5rem;
     background: linear-gradient(90deg, #a8edea, #fed6e3, #a8edea);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    z-index: 30;
+    font-weight: 700;
     pointer-events: none;
-    white-space: nowrap;
+    user-select: none;
   }
 
-  .carousel-track {
+  /* Contenedor de las 3 filas superpuestas */
+  .carousel-wrapper {
+    position: relative;
+    height: 420px;
+    overflow: hidden;
+  }
+
+  /* Cada fila */
+  .shorts-row {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .carousel-track.active {
+  .shorts-row.active {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
     z-index: 10;
   }
 
-  .shorts-wrapper {
-    width: 100%;
+  /* Scroll infinito suave (igual que antes) */
+  .scroll-wrapper {
     overflow: hidden;
-    padding: 20px 0;
+    padding: 15px 0;
   }
 
   .shorts-track {
     display: flex;
-    gap: 2.4rem;
-    padding-left: 3rem;
+    gap: 2.2rem;
+    padding-left: 2rem;
     width: fit-content;
-    animation: scrollLeft 60s linear infinite;
+    animation: scrollLeft 55s linear infinite;
     will-change: transform;
   }
 
-  .carousel-track:nth-child(2) .shorts-track { animation-duration: 55s; }
-  .carousel-track:nth-child(3) .shorts-track { animation-duration: 70s; animation-direction: reverse; }
+  /* Velocidades distintas para cada fila */
+  .shorts-row:nth-child(1) .shorts-track { animation-duration: 50s; }
+  .shorts-row:nth-child(2) .shorts-track { animation-duration: 62s; animation-direction: reverse; }
+  .shorts-row:nth-child(3) .shorts-track { animation-duration: 58s; }
 
   @keyframes scrollLeft {
     0%   { transform: translate3d(0, 0, 0); }
     100% { transform: translate3d(-50%, 0, 0); }
   }
 
-  .shorts-wrapper:hover .shorts-track { animation-play-state: paused; }
+  .scroll-wrapper:hover .shorts-track {
+    animation-play-state: paused;
+  }
 
-  /* Botones ← y → a la altura del título */
-  .carousel-nav {
+  /* Botones ← → a la altura del título (no de las tarjetas) */
+  .carousel-nav-btn {
     position: absolute;
-    top: -80px;
-    width: 62px;
-    height: 62px;
-    background: rgba(255, 255, 255, 0.09);
-    backdrop-filter: blur(14px);
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    top: -85px;
+    width: 58px;
+    height: 58px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 40;
+    z-index: 50;
     transition: all 0.4s ease;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
   }
 
-  .carousel-nav:hover {
+  .carousel-nav-btn:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.12);
+    transform: scale(1.nav-btn10);
   }
 
-  .carousel-nav ion-icon {
-    font-size: 32px;
+  .carousel-nav-btn ion-icon {
+    font-size: 30px;
     color: #fff;
   }
 
-  .carousel-nav.prev { left: calc(50% - 380px); }
-  .carousel-nav.next { right: calc(50% - 380px); }
+  .carousel-nav-btn.prev { left: calc(50% - 420px); }
+  .carousel-nav-btn.next { right: calc(50% - 420px); }
 
-  @media (max-width: 1100px) {
-    .carousel-nav.prev { left: 20px; }
-    .carousel-nav.next { right: 20px; }
+  @media (max-width: 1200px) {
+    .carousel-nav-btn.prev { left: 30px; }
+    .carousel-nav-btn.next { right: 30px; }
   }
 
   @media (max-width: 768px) {
-    .carousel-title { font-size: 2.4rem; top: -70px; }
-    .carousel-nav { width: 52px; height: 52px; }
-    .carousel-nav ion-icon { font-size: 26px; }
+    .services-title { font-size: 2.4rem; margin-bottom: 4rem; }
+    .carousel-nav-btn { width: 50px; height: 50px; top: -78px; }
+    .carousel-nav-btn ion-icon { font-size: 26px; }
   }
 
-  /* Tarjetas */
+  /* Tarjetas (exactamente como las tenías antes) */
   .short-item {
     flex: 0 0 340px;
-    background: rgba(15,20,40,.95);
-    border-radius: 20px;
+    background: rgba(15,20,40,.9);
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 0 50px rgba(255,215,0,.2);
-    transition: all .5s ease;
+    box-shadow: 0 0 40px rgba(255,215,0,.15);
+    transition: all .4s ease;
     text-align: center;
-    padding: 2.2rem 1.6rem;
-    backdrop-filter: blur(8px);
+    padding: 2rem 1.5rem;
   }
 
   .short-item:hover {
-    transform: translateY(-16px) scale(1.06);
-    box-shadow: 0 0 80px rgba(255,215,0,.5);
+    transform: translateY(-12px) scale(1.05);
+    box-shadow: 0 0 70px rgba(255,215,0,.45);
   }
 
-  .emoji-big { font-size: 8.5rem; margin-bottom: 1rem; filter: drop-shadow(0 0 20px rgba(255,255,255,.4)); }
-  .short-item h3 { font-size: 1.65rem; color: #fff; margin: 1rem 0 .6rem; }
-  .short-item p { color: #b0c4de; font-size: 1.12rem; }
+  .emoji-big {
+    font-size: 8rem;
+    margin-bottom: 1rem;
+    display: block;
+    filter: drop-shadow(0 0 20px rgba(255,255,255,.3));
+  }
+
+  .short-item h3 {
+    font-size: 1.6rem;
+    color: #fff;
+    margin: 1rem 0 .5rem;
+  }
+
+  .short-item p {
+    color: #b0c4de;
+    font-size: 1.1rem;
+  }
 
   @media(max-width:768px){
     .short-item { flex: 0 0 280px; }
-    .emoji-big { font-size: 6.5rem; }
+    .emoji-big { font-size: 6rem; }
+    .short-item h3 { font-size: 1.4rem; }
   }
 </style>
 
-<!-- CARRUSEL EN EL MAIN -->
+<!-- EN EL <main> reemplaza todo por esto -->
 <main>
-  <div class="carousel-container">
+  <section class="services-carousel">
 
-    <!-- Título flotante centrado -->
-    <h2 class="carousel-title">Nuestros Servicios Estelares</h2>
+    <h2 class="services-title">Nuestros Servicios</h2>
 
-    <!-- Botones ← y → a la misma altura que el título -->
-    <div class="carousel-nav prev" id="prevBtn"><ion-icon name="chevron-back-outline"></ion-icon></div>
-    <div class="carousel-nav next" id="nextBtn"><ion-icon name="chevron-forward-outline"></ion-icon></div>
+    <!-- Botones ← y → alineados con el título -->
+    <div class="carousel-nav-btn prev" id="prevService"><ion-icon name="chevron-back-outline"></ion-icon></div>
+    <div class="carousel-nav-btn next" id="nextService"><ion-icon name="chevron-forward-outline"></ion-icon></div>
 
-    <!-- FILA 1 - Diseño Web -->
-    <div class="carousel-track" id="track1">
-      <div class="shorts-wrapper">
-        <div class="shorts-track">
-          <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales, modernos y optimizados</p></div>
-          <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas online que convierten</p></div>
-          <div class="short-item"><span class="emoji-big">Portfolio</span><h3>Portafolios Creativos</h3><p>Para artistas y freelancers</p></div>
-          <div class="short-item"><span class="emoji-big">Landing Page</span><h3>Landing Pages</h3><p>Alta conversión garantizada</p></div>
-          <div class="short-item"><span class="emoji-big">Blog</span><h3>Blogs & Revistas</h3><p>Contenido que engancha</p></div>
-          <div class="short-item"><span class="emoji-big">Dashboard</span><h3>Dashboards</h3><p>Paneles intuitivos</p></div>
-          <!-- Duplicado para loop -->
-          <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales, modernos y optimizados</p></div>
-          <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas online que convierten</p></div>
-          <div class="short-item"><span class="emoji-big">Portfolio</span><h3>Portafolios Creativos</h3><p>Para artistas y freelancers</p></div>
-          <div class="short-item"><span class="emoji-big">Landing Page</span><h3>Landing Pages</h3><p>Alta conversión garantizada</p></div>
+    <div class="carousel-wrapper">
+
+      <!-- FILA 1 - Diseño Web -->
+      <div class="shorts-row" id="service1">
+        <div class="scroll-wrapper">
+          <div class="shorts-track">
+            <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales y optimizados</p></div>
+            <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas que convierten</p></div>
+            <div class="short-item"><span class="emoji-big">Portfolio</span><h3>Portafolios</h3><p>Para creativos</p></div>
+            <div class="short-item"><span class="emoji-big">Landing Page</span><h3>Landing Pages</h3><p>Alta conversión</p></div>
+            <div class="short-item"><span class="emoji-big">Blog</span><h3>Blogs</h3><p>Contenido vivo</p></div>
+            <div class="short-item"><span class="emoji-big">Dashboard</span><h3>Dashboards</h3><p>Paneles intuitivos</p></div>
+            <!-- Duplicado -->
+            <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales y optimizados</p></div>
+            <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas que convierten</p></div>
+            <!-- ... más duplicados si quieres -->
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- FILA 2 - Servicios Digitales (visible por defecto) -->
-    <div class="carousel-track active" id="track2">
-      <div class="shorts-wrapper">
-        <div class="shorts-track">
-          <div class="short-item"><span class="emoji-big">Palette</span><h3>Branding</h3><p>Identidad visual única</p></div>
-          <div class="short-item"><span class="emoji-big">SEO</span><h3>Posicionamiento SEO</h3><p>Primera página de Google</p></div>
-          <div class="short-item"><span class="emoji-big">Mobile</span><h3>Apps & PWA</h3><p>Aplicaciones progresivas</p></div>
-          <div class="short-item"><span class="emoji-big">Maintenance</span><h3>Mantenimiento</h3><p>Soporte 24/7</p></div>
-          <div class="short-item"><span class="emoji-big">Speed</span><h3>Optimización</h3><p>Velocidad ultrarrápida</p></div>
-          <div class="short-item"><span class="emoji-big">Security</span><h3>Seguridad</h3><p>Protección total</p></div>
-          <!-- Duplicado -->
-          <div class="short-item"><span class="emoji-big">Palette</span><h3>Branding</h3><p>Identidad visual única</p></div>
-          <div class="short-item"><span class="emoji-big">SEO</span><h3>Posicionamiento SEO</h3><p>Primera página de Google</p></div>
-          <div class="short-item"><span class="emoji-big">Mobile</span><h3>Apps & PWA</h3><p>Aplicaciones progresivas</p></div>
-          <div class="short-item"><span class="emoji-big">Maintenance</span><h3>Mantenimiento</h3><p>Soporte 24/7</p></div>
+      <!-- FILA 2 - Digital (visible por defecto) -->
+      <div class="shorts-row active" id="service2">
+        <div class="scroll-wrapper">
+          <div class="shorts-track">
+            <div class="short-item"><span class="emoji-big">Palette</span><h3>Branding</h3><p>Identidad única</p></div>
+            <div class="short-item"><span class="emoji-big">SEO</span><h3>SEO</h3><p>Primera página</p></div>
+            <div class="short-item"><span class="emoji-big">Mobile</span><h3>Apps & PWA</h3><p>Rápidas y modernas</p></div>
+            <div class="short-item"><span class="emoji-big">Maintenance</span><h3>Mantenimiento</h3><p>Soporte 24/7</p></div>
+            <div class="short-item"><span class="emoji-big">Speed</span><h3>Optimización</h3><p>Velocidad extrema</p></div>
+            <div class="short-item"><span class="emoji-big">Security</span><h3>Seguridad</h3><p>Protección total</p></div>
+            <!-- Duplicado -->
+            <div class="short-item"><span class="emoji-big">Palette</span><h3>Branding</h3><p>Identidad única</p></div>
+            <div class="short-item"><span class="emoji-big">SEO</span><h3>SEO</h3><p>Primera página</p></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- FILA 3 - Marketing & Growth -->
-    <div class="carousel-track" id="track3">
-      <div class="shorts-wrapper">
-        <div class="shorts-track">
-          <div class="short-item"><span class="emoji-big">Megaphone</span><h3>Campañas Ads</h3><p>Google, Meta, TikTok Ads</p></div>
-          <div class="short-item"><span class="emoji-big">Chart</span><h3>Analítica Web</h3><p>Datos que impulsan crecimiento</p></div>
-          <div class="short-item"><span class="emoji-big">Funnel</span><h3>Embudos de Venta</h3><p>Conversión máxima</p></div>
-          <div class="short-item"><span class="emoji-big">Mail</span><h3>Email Marketing</h3><p>Automatizaciones que venden</p></div>
-          <div class="short-item"><span class="emoji-big">Social</span><h3>Gestión de Redes</h3><p>Contenido viral garantizado</p></div>
-          <div class="short-item"><span class="emoji-big">AI</span><h3>IA & Automatización</h3><p>El futuro de tu negocio</p></div>
-          <!-- Duplicado -->
-          <div class="short-item"><span class="emoji-big">Megaphone</span><h3>Campañas Ads</h3><p>Google, Meta, TikTok Ads</p></div>
-          <div class="short-item"><span class="emoji-big">Chart</span><h3>Analítica Web</h3><p>Datos que impulsan crecimiento</p></div>
+      <!-- FILA 3 - Marketing -->
+      <div class="shorts-row" id="service3">
+        <div class="scroll-wrapper">
+          <div class="shorts-track">
+            <div class="short-item"><span class="emoji-big">Megaphone</span><h3>Ads</h3><p>Google, Meta, TikTok</p></div>
+            <div class="short-item"><span class="emoji-big">Chart</span><h3>Analítica</h3><p>Datos accionables</p></div>
+            <div class="short-item"><span class="emoji-big">Funnel</span><h3>Embudos</h3><p>Conversión máxima</p></div>
+            <div class="short-item"><span class="emoji-big">Mail</span><h3>Email Marketing</h3><p>Automatizado</p></div>
+            <div class="short-item"><span class="emoji-big">Social</span><h3>Redes Sociales</h3><p>Contenido viral</p></div>
+            <div class="short-item"><span class="emoji-big">AI</span><h3>IA</h3><p>Automatización</p></div>
+            <!-- Duplicado -->
+            <div class="short-item"><span class="emoji-big">Megaphone</span><h3>Ads</h3><p>Google, Meta, TikTok</p></div>
+            <div class="short-item"><span class="emoji-big">Chart</span><h3>Analítica</h3><p>Datos accionables</p></div>
+          </div>
         </div>
       </div>
-    </div>
 
-  </div>
+    </div>
+  </section>
 </main>
 
-<!-- SCRIPT DEL CARRUSEL -->
+<!-- SCRIPT DEL CARRUSEL (pequeño y limpio) -->
 <script>
-  const tracks = [
-    document.getElementById('track1'),
-    document.getElementById('track2'),
-    document.getElementById('track3')
+  const rows = [
+    document.getElementById('service1'),
+    document.getElementById('service2'),
+    document.getElementById('service3')
   ];
-  let current = 1; // índice 1 = fila central
+  let current = 1; // empieza en la del medio
 
-  document.getElementById('prevBtn').addEventListener('click', () => {
+  document.getElementById('prevService').addEventListener('click', () => {
     current = current === 0 ? 2 : current - 1;
-    updateCarousel();
+    update();
   });
 
-  document.getElementById('nextBtn').addEventListener('click', () => {
+  document.getElementById('nextService').addEventListener('click', () => {
     current = (current + 1) % 3;
-    updateCarousel();
+    update();
   });
 
-  function updateCarousel() {
-    tracks.forEach((track, i) => {
-      track.classList.toggle('active', i === current);
+  function update() {
+    rows.forEach((row, i) => {
+      row.classList.toggle('active', i === current);
     });
   }
-
-  // Opcional: navegación con flechas del teclado
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft') document.getElementById('prevBtn').click();
-    if (e.key === 'ArrowRight') document.getElementById('nextBtn').click();
-  });
 </script>
 </body>
 </html>
