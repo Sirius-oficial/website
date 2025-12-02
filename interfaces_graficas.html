@@ -8,219 +8,248 @@
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{--sidebar-w:260px}
-    html,body{height:100%;font-family:'Poppins',sans-serif;background:#000;color:#e0e0e0;overflow-x:hidden}
-    main{position:relative;z-index:10;margin-left:var(--sidebar-w);min-height:100vh;padding:3rem 2rem}
-    @media(max-width:900px){main{margin-left:0;padding-top:6rem}}
+ <style>
+  /* ==================== CARRUSEL DE 3 FILAS SUPERPUESTAS ==================== */
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    margin: 8rem 0;
+    overflow: hidden;
+  }
 
-    canvas#stars{position:fixed;inset:0;z-index:0}
-    .nebula{position:fixed;inset:0;z-index:1;mix-blend-mode:screen;opacity:.36;pointer-events:none;
-      background:radial-gradient(circle at 15% 25%,rgba(79,43,143,.48),transparent 20%),
-                 radial-gradient(circle at 70% 75%,rgba(11,60,120,.36),transparent 25%);
-      filter:blur(60px)}
+  .carousel-title {
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a8edea, #fed6e3, #a8edea);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 30;
+    pointer-events: none;
+    white-space: nowrap;
+  }
 
-    /* ==================== SIDEBAR (el mismo bonito que tenías) ==================== */
-    .sidebar{position:fixed;left:0;top:0;width:var(--sidebar-w);height:100%;padding:20px;background:rgba(12,18,36,.98);backdrop-filter:blur(10px);border-right:1px solid rgba(255,255,255,.04);z-index:1000;transform:translateX(-270px);transition:transform .35s ease}
-    .sidebar.open{transform:translateX(0)}
-    @media(min-width:901px){.sidebar{transform:translateX(0)}}
-    .brand{display:flex;align-items:center;gap:12px;margin-bottom:30px}
-    .brand img{width:44px;border-radius:8px}
-    nav a{display:flex;align-items:center;gap:14px;color:#dbe4ff;text-decoration:none;padding:14px 12px;border-radius:10px;position:relative;overflow:hidden;transition:all .3s ease}
-    nav a:hover{background:rgba(255,255,255,.08);color:#fff;transform:translateX(6px)}
-    nav a::after{content:"★";position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:18px;color:#ffd700;opacity:0;transition:opacity .3s}
-    nav a:hover::after{opacity:1;animation:twinkle .8s ease-in-out}
-    @keyframes twinkle{0%,100%{opacity:1;transform:translateY(-50%) scale(1)}50%{opacity:.4;transform:translateY(-50%) scale(1.4)}}
-    .line{height:1px;background:rgba(255,255,255,.06);margin:20px 0}
-    .menu{position:fixed;right:16px;top:16px;z-index:1100;width:48px;height:48px;background:#0c1224;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
-    .menu ion-icon{font-size:30px;color:#fff}
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:none}
-    .overlay.show{display:block}
-    @media(min-width:901px){.menu{display:none}}
+  .carousel-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
 
-       /* ==================== SCROLL HORIZONTAL MEJORADO + BOTONES DE NAVEGACIÓN ==================== */
-    .shorts-row {
-      margin-bottom: 7rem;
-      position: relative;
-    }
+  .carousel-track.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 10;
+  }
 
-    .shorts-row h2 {
-      font-size: 2.9rem;
-      text-align: center;
-      margin-bottom: 3rem;
-      background: linear-gradient(90deg, #a8edea, #fed6e3, #a8edea);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: 700;
-      pointer-events: none;
-    }
+  .shorts-wrapper {
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+  }
 
-    .scroll-wrapper {
-      overflow: hidden;
-      padding: 15px 0;
-      position: relative;
-    }
+  .shorts-track {
+    display: flex;
+    gap: 2.4rem;
+    padding-left: 3rem;
+    width: fit-content;
+    animation: scrollLeft 60s linear infinite;
+    will-change: transform;
+  }
 
-    .shorts-track {
-      display: flex;
-      gap: 2.2rem;
-      padding-left: 2rem;
-      width: fit-content;
-      transform: translate3d(0, 0, 0);
-      will-change: transform;
-      animation: scrollLeft 55s linear infinite;
-    }
+  .carousel-track:nth-child(2) .shorts-track { animation-duration: 55s; }
+  .carousel-track:nth-child(3) .shorts-track { animation-duration: 70s; animation-direction: reverse; }
 
-    .shorts-row:nth-of-type(2) .shorts-track {
-      animation-duration: 68s;
-      animation-direction: reverse;
-    }
+  @keyframes scrollLeft {
+    0%   { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+  }
 
-    @keyframes scrollLeft {
-      0%   { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(-50%, 0, 0); }
-    }
+  .shorts-wrapper:hover .shorts-track { animation-play-state: paused; }
 
-    .scroll-wrapper:hover .shorts-track {
-      animation-play-state: paused;
-    }
+  /* Botones ← y → a la altura del título */
+  .carousel-nav {
+    position: absolute;
+    top: -80px;
+    width: 62px;
+    height: 62px;
+    background: rgba(255, 255, 255, 0.09);
+    backdrop-filter: blur(14px);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 40;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
 
-    /* Botones circulares ← → */
-    .nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 56px;
-      height: 56px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 20;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s ease;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    }
+  .carousel-nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.12);
+  }
 
-    .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
-      transform: translateY(-50%) scale(1.1);
-    }
+  .carousel-nav ion-icon {
+    font-size: 32px;
+    color: #fff;
+  }
 
-    .nav-btn ion-icon {
-      font-size: 28px;
-      color: #fff;
-    }
+  .carousel-nav.prev { left: calc(50% - 380px); }
+  .carousel-nav.next { right: calc(50% - 380px); }
 
-    .nav-btn.prev { left: 20px; }
-    .nav-btn.next { right: 20px; }
+  @media (max-width: 1100px) {
+    .carousel-nav.prev { left: 20px; }
+    .carousel-nav.next { right: 20px; }
+  }
 
-    /* Mostrar botones al hacer hover en la fila */
-    .shorts-row:hover .nav-btn {
-      opacity: 1;
-      visibility: visible;
-    }
+  @media (max-width: 768px) {
+    .carousel-title { font-size: 2.4rem; top: -70px; }
+    .carousel-nav { width: 52px; height: 52px; }
+    .carousel-nav ion-icon { font-size: 26px; }
+  }
 
-    @media (max-width: 768px) {
-      .nav-btn { width: 48px; height: 48px; }
-      .nav-btn ion-icon { font-size: 24px; }
-      .nav-btn.prev { left: 10px; }
-      .nav-btn.next { right: 10px; }
-    }
+  /* Tarjetas */
+  .short-item {
+    flex: 0 0 340px;
+    background: rgba(15,20,40,.95);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(255,215,0,.2);
+    transition: all .5s ease;
+    text-align: center;
+    padding: 2.2rem 1.6rem;
+    backdrop-filter: blur(8px);
+  }
 
-    .short-item {
-      flex: 0 0 340px;
-      background: rgba(15,20,40,.9);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 0 40px rgba(255,215,0,.15);
-      transition: all .4s ease;
-      text-align: center;
-      padding: 2rem 1.5rem;
-    }
+  .short-item:hover {
+    transform: translateY(-16px) scale(1.06);
+    box-shadow: 0 0 80px rgba(255,215,0,.5);
+  }
 
-    .short-item:hover {
-      transform: translateY(-12px) scale(1.05);
-      box-shadow: 0 0 70px rgba(255,215,0,.45);
-    }
+  .emoji-big { font-size: 8.5rem; margin-bottom: 1rem; filter: drop-shadow(0 0 20px rgba(255,255,255,.4)); }
+  .short-item h3 { font-size: 1.65rem; color: #fff; margin: 1rem 0 .6rem; }
+  .short-item p { color: #b0c4de; font-size: 1.12rem; }
 
-    .emoji-big { font-size: 8rem; margin-bottom: 1rem; display: block; filter: drop-shadow(0 0 20px rgba(255,255,255,255,.3)); }
-    .short-item h3 { font-size: 1.6rem; color: #fff; margin: 1rem 0 .5rem; }
-    .short-item p { color: #b0c4de; font-size: 1.1rem; }
+  @media(max-width:768px){
+    .short-item { flex: 0 0 280px; }
+    .emoji-big { font-size: 6.5rem; }
+  }
+</style>
 
-    @media(max-width:768px){
-      .short-item { flex: 0 0 280px; }
-      .emoji-big { font-size: 6rem; }
-      .short-item h3 { font-size: 1.4rem; }
-    }
-  </style>
-</head>
-<body>
-  <!-- ... todo lo anterior igual ... -->
-
+<!-- CARRUSEL EN EL MAIN -->
 <main>
+  <div class="carousel-container">
 
-  <!-- FILA 1 -->
-  <div class="shorts-row">
-    <h2>Diseño Web & Desarrollo</h2>
+    <!-- Título flotante centrado -->
+    <h2 class="carousel-title">Nuestros Servicios Estelares</h2>
 
-    <!-- Botones de navegación -->
-    <div class="nav-btn prev" data-dir="prev"><ion-icon name="chevron-back-outline"></ion-icon></div>
-    <div class="nav-btn next" data-dir="next"><ion-icon name="chevron-forward-outline"></ion-icon></div>
+    <!-- Botones ← y → a la misma altura que el título -->
+    <div class="carousel-nav prev" id="prevBtn"><ion-icon name="chevron-back-outline"></ion-icon></div>
+    <div class="carousel-nav next" id="nextBtn"><ion-icon name="chevron-forward-outline"></ion-icon></div>
 
-    <div class="scroll-wrapper">
-      <div class="shorts-track" id="row1">
-        <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales, modernos y optimizados</p></div>
-        <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas online que convierten</p></div>
-        <div class="short-item"><span class="emoji-big">Portfolio</span><h3>Portafolios Creativos</h3><p>Para artistas y freelancers</p></div>
-        <div class="short-item"><span class="emoji-big">Landing Page</span><h3>Landing Pages</h3><p>Alta conversión garantizada</p></div>
-        <div class="short-item"><span class="emoji-big">Blog</span><h3>Blogs & Revistas</h3><p>Contenido que engancha</p></div>
-        <div class="short-item"><span class="emoji-big">Dashboard</span><h3>Dashboards</h3><p>Paneles administrativos intuitivos</p></div>
-
-        <!-- Duplicado para loop infinito -->
-        <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales, modernos y optimizados</p></div>
-        <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas online que convierten</p></div>
-        <div class="short-item"><span class="emoji-big">Portfolio</span><h3>Portafolios Creativos</h3><p>Para artistas y freelancers</p></div>
-        <div class="short-item"><span class="emoji-big">Landing Page</span><h3>Landing Pages</h3><p>Alta conversión garantizada</p></div>
-        <div class="short-item"><span class="emoji-big">Blog</span><h3>Blogs & Revistas</h3><p>Contenido que engancha</p></div>
-        <div class="short-item"><span class="emoji-big">Dashboard</span><h3>Dashboards</h3><p>Paneles administrativos intuitivos</p></div>
+    <!-- FILA 1 - Diseño Web -->
+    <div class="carousel-track" id="track1">
+      <div class="shorts-wrapper">
+        <div class="shorts-track">
+          <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales, modernos y optimizados</p></div>
+          <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas online que convierten</p></div>
+          <div class="short-item"><span class="emoji-big">Portfolio</span><h3>Portafolios Creativos</h3><p>Para artistas y freelancers</p></div>
+          <div class="short-item"><span class="emoji-big">Landing Page</span><h3>Landing Pages</h3><p>Alta conversión garantizada</p></div>
+          <div class="short-item"><span class="emoji-big">Blog</span><h3>Blogs & Revistas</h3><p>Contenido que engancha</p></div>
+          <div class="short-item"><span class="emoji-big">Dashboard</span><h3>Dashboards</h3><p>Paneles intuitivos</p></div>
+          <!-- Duplicado para loop -->
+          <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales, modernos y optimizados</p></div>
+          <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas online que convierten</p></div>
+          <div class="short-item"><span class="emoji-big">Portfolio</span><h3>Portafolios Creativos</h3><p>Para artistas y freelancers</p></div>
+          <div class="short-item"><span class="emoji-big">Landing Page</span><h3>Landing Pages</h3><p>Alta conversión garantizada</p></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Puedes repetir la misma estructura para más filas -->
+    <!-- FILA 2 - Servicios Digitales (visible por defecto) -->
+    <div class="carousel-track active" id="track2">
+      <div class="shorts-wrapper">
+        <div class="shorts-track">
+          <div class="short-item"><span class="emoji-big">Palette</span><h3>Branding</h3><p>Identidad visual única</p></div>
+          <div class="short-item"><span class="emoji-big">SEO</span><h3>Posicionamiento SEO</h3><p>Primera página de Google</p></div>
+          <div class="short-item"><span class="emoji-big">Mobile</span><h3>Apps & PWA</h3><p>Aplicaciones progresivas</p></div>
+          <div class="short-item"><span class="emoji-big">Maintenance</span><h3>Mantenimiento</h3><p>Soporte 24/7</p></div>
+          <div class="short-item"><span class="emoji-big">Speed</span><h3>Optimización</h3><p>Velocidad ultrarrápida</p></div>
+          <div class="short-item"><span class="emoji-big">Security</span><h3>Seguridad</h3><p>Protección total</p></div>
+          <!-- Duplicado -->
+          <div class="short-item"><span class="emoji-big">Palette</span><h3>Branding</h3><p>Identidad visual única</p></div>
+          <div class="short-item"><span class="emoji-big">SEO</span><h3>Posicionamiento SEO</h3><p>Primera página de Google</p></div>
+          <div class="short-item"><span class="emoji-big">Mobile</span><h3>Apps & PWA</h3><p>Aplicaciones progresivas</p></div>
+          <div class="short-item"><span class="emoji-big">Maintenance</span><h3>Mantenimiento</h3><p>Soporte 24/7</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILA 3 - Marketing & Growth -->
+    <div class="carousel-track" id="track3">
+      <div class="shorts-wrapper">
+        <div class="shorts-track">
+          <div class="short-item"><span class="emoji-big">Megaphone</span><h3>Campañas Ads</h3><p>Google, Meta, TikTok Ads</p></div>
+          <div class="short-item"><span class="emoji-big">Chart</span><h3>Analítica Web</h3><p>Datos que impulsan crecimiento</p></div>
+          <div class="short-item"><span class="emoji-big">Funnel</span><h3>Embudos de Venta</h3><p>Conversión máxima</p></div>
+          <div class="short-item"><span class="emoji-big">Mail</span><h3>Email Marketing</h3><p>Automatizaciones que venden</p></div>
+          <div class="short-item"><span class="emoji-big">Social</span><h3>Gestión de Redes</h3><p>Contenido viral garantizado</p></div>
+          <div class="short-item"><span class="emoji-big">AI</span><h3>IA & Automatización</h3><p>El futuro de tu negocio</p></div>
+          <!-- Duplicado -->
+          <div class="short-item"><span class="emoji-big">Megaphone</span><h3>Campañas Ads</h3><p>Google, Meta, TikTok Ads</p></div>
+          <div class="short-item"><span class="emoji-big">Chart</span><h3>Analítica Web</h3><p>Datos que impulsan crecimiento</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </main>
 
-<!-- SCRIPT PARA LOS BOTONES (añádelo justo antes de cerrar </body>) -->
+<!-- SCRIPT DEL CARRUSEL -->
 <script>
-// Control de botones ← →
-document.querySelectorAll('.nav-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const wrapper = btn.closest('.shorts-row').querySelector('.scroll-wrapper');
-    const track = wrapper.querySelector('.shorts-track');
-    const itemWidth = track.children[0].offsetWidth + 35; // ancho tarjeta + gap
+  const tracks = [
+    document.getElementById('track1'),
+    document.getElementById('track2'),
+    document.getElementById('track3')
+  ];
+  let current = 1; // índice 1 = fila central
 
-    const direction = btn.dataset.dir === 'next' ? 1 : -1;
-    const scrollAmount = itemWidth * 3 * direction; // avanza 3 tarjetas
-
-    // Desactivamos temporalmente la animación para que el desplazamiento manual sea instantáneo
-    track.style.animation = 'none';
-    wrapper.scrollLeft -= scrollAmount;
-
-    // Reactivamos la animación después de un frame
-    requestAnimationFrame(() => {
-      track.style.animation = '';
-    });
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    current = current === 0 ? 2 : current - 1;
+    updateCarousel();
   });
-});
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    current = (current + 1) % 3;
+    updateCarousel();
+  });
+
+  function updateCarousel() {
+    tracks.forEach((track, i) => {
+      track.classList.toggle('active', i === current);
+    });
+  }
+
+  // Opcional: navegación con flechas del teclado
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') document.getElementById('prevBtn').click();
+    if (e.key === 'ArrowRight') document.getElementById('nextBtn').click();
+  });
 </script>
 </body>
 </html>
