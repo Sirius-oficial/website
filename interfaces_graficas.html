@@ -40,111 +40,152 @@
     .overlay.show{display:block}
     @media(min-width:901px){.menu{display:none}}
 
-    /* ==================== SCROLL HORIZONTAL COMO SPORTHALL ==================== */
-    .shorts-row{
-      margin-bottom:6rem;
+       /* ==================== SCROLL HORIZONTAL MEJORADO + BOTONES DE NAVEGACIÓN ==================== */
+    .shorts-row {
+      margin-bottom: 7rem;
+      position: relative;
     }
-    .shorts-row h2{
-      font-size:2.8rem;
-      text-align:center;
-      margin-bottom:2.5rem;
-      background:linear-gradient(90deg,#a8edea,#fed6e3,#a8edea);
-      -webkit-background-clip:text;background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
-    .scroll-container{
-      overflow:hidden;
-      padding:10px 0;
-    }
-    .shorts-track{
-      display:flex;
-      gap:2rem;
-      padding-left:2rem;
-      animation: scroll 45s linear infinite;
-      width:max-content;
-    }
-    @keyframes scroll{
-      0%{transform:translateX(0)}
-      100%{transform:translateX(-50%)}
-    }
-    .shorts-track:hover{animation-play-state:paused}
 
-    .short-item{
-      flex:0 0 320px;
-      background:rgba(15,20,40,.9);
-      border-radius:18px;
-      overflow:hidden;
-      box-shadow:0 0 40px rgba(255,215,0,.15);
-      transition:all .4s ease;
-      text-align:center;
-      padding:2rem 1.5rem;
+    .shorts-row h2 {
+      font-size: 2.9rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      background: linear-gradient(90deg, #a8edea, #fed6e3, #a8edea);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      pointer-events: none;
     }
-    .short-item:hover{
-      transform:scale(1.07);
-      box-shadow:0 0 70px rgba(255,215,0,.4);
+
+    .scroll-wrapper {
+      overflow: hidden;
+      padding: 15px 0;
+      position: relative;
     }
-    .emoji-big{
-      font-size:8rem;
-      margin-bottom:1rem;
-      display:block;
-      filter:drop-shadow(0 0 20px rgba(255,255,255,.3));
+
+    .shorts-track {
+      display: flex;
+      gap: 2.2rem;
+      padding-left: 2rem;
+      width: fit-content;
+      transform: translate3d(0, 0, 0);
+      will-change: transform;
+      animation: scrollLeft 55s linear infinite;
     }
-    .short-item h3{
-      font-size:1.6rem;
-      color:#fff;
-      margin:1rem 0 .5rem;
+
+    .shorts-row:nth-of-type(2) .shorts-track {
+      animation-duration: 68s;
+      animation-direction: reverse;
     }
-    .short-item p{
-      color:#b0c4de;
-      font-size:1.1rem;
+
+    @keyframes scrollLeft {
+      0%   { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
     }
+
+    .scroll-wrapper:hover .shorts-track {
+      animation-play-state: paused;
+    }
+
+    /* Botones circulares ← → */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 56px;
+      height: 56px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .nav-btn ion-icon {
+      font-size: 28px;
+      color: #fff;
+    }
+
+    .nav-btn.prev { left: 20px; }
+    .nav-btn.next { right: 20px; }
+
+    /* Mostrar botones al hacer hover en la fila */
+    .shorts-row:hover .nav-btn {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    @media (max-width: 768px) {
+      .nav-btn { width: 48px; height: 48px; }
+      .nav-btn ion-icon { font-size: 24px; }
+      .nav-btn.prev { left: 10px; }
+      .nav-btn.next { right: 10px; }
+    }
+
+    .short-item {
+      flex: 0 0 340px;
+      background: rgba(15,20,40,.9);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(255,215,0,.15);
+      transition: all .4s ease;
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .short-item:hover {
+      transform: translateY(-12px) scale(1.05);
+      box-shadow: 0 0 70px rgba(255,215,0,.45);
+    }
+
+    .emoji-big { font-size: 8rem; margin-bottom: 1rem; display: block; filter: drop-shadow(0 0 20px rgba(255,255,255,255,.3)); }
+    .short-item h3 { font-size: 1.6rem; color: #fff; margin: 1rem 0 .5rem; }
+    .short-item p { color: #b0c4de; font-size: 1.1rem; }
 
     @media(max-width:768px){
-      .shorts-row h2{font-size:2.2rem}
-      .short-item{flex:0 0 260px}
-      .emoji-big{font-size:6rem}
-      .short-item h3{font-size:1.4rem}
+      .short-item { flex: 0 0 280px; }
+      .emoji-big { font-size: 6rem; }
+      .short-item h3 { font-size: 1.4rem; }
     }
   </style>
 </head>
 <body>
-
-<canvas id="stars"></canvas>
-<div class="nebula"></div>
-
-<!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
-  <div class="brand">
-    <img src="logo.png" alt="Sirius">
-  </div>
-  <nav>
-    <a href="index.html"><ion-icon name="home-outline"></ion-icon><span>INICIO</span></a>
-    <a href="sobre_nosostros.html"><ion-icon name="people-outline"></ion-icon><span>SOBRE NOSOTROS</span></a>
-    <a href="servicios.html"><ion-icon name="create-outline"></ion-icon><span>SERVICIOS</span></a>
-    <a href="contacto.html"><ion-icon name="call-outline"></ion-icon><span>CONTACTO</span></a>
-    <div class="line"></div>
-    <div class="settings" id="settings">
-      <div class="settings-toggle" id="settings-toggle">
-        <ion-icon name="settings-outline"></ion-icon><span>AJUSTES</span>
-      </div>
-      <div class="settings-menu" id="settings-menu">
-        <div class="opt"><span>Detener estrellas</span><button class="btn" id="btn-animation">Stop</button></div>
-        <div class="opt"><span>Silenciar sonidos</span><button class="btn" id="btn-sound">Mute</button></div>
-      </div>
-    </div>
-  </nav>
-</aside>
-
-<div class="menu" id="btn-menu"><ion-icon name="menu-outline"></ion-icon></div>
-<div class="overlay" id="overlay"></div>
+  <!-- ... todo lo anterior igual ... -->
 
 <main>
 
   <!-- FILA 1 -->
   <div class="shorts-row">
     <h2>Diseño Web & Desarrollo</h2>
-    <div class="scroll-container">
-      <div class="shorts-track">
+
+    <!-- Botones de navegación -->
+    <div class="nav-btn prev" data-dir="prev"><ion-icon name="chevron-back-outline"></ion-icon></div>
+    <div class="nav-btn next" data-dir="next"><ion-icon name="chevron-forward-outline"></ion-icon></div>
+
+    <div class="scroll-wrapper">
+      <div class="shorts-track" id="row1">
+        <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales, modernos y optimizados</p></div>
+        <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas online que convierten</p></div>
+        <div class="short-item"><span class="emoji-big">Portfolio</span><h3>Portafolios Creativos</h3><p>Para artistas y freelancers</p></div>
+        <div class="short-item"><span class="emoji-big">Landing Page</span><h3>Landing Pages</h3><p>Alta conversión garantizada</p></div>
+        <div class="short-item"><span class="emoji-big">Blog</span><h3>Blogs & Revistas</h3><p>Contenido que engancha</p></div>
+        <div class="short-item"><span class="emoji-big">Dashboard</span><h3>Dashboards</h3><p>Paneles administrativos intuitivos</p></div>
+
+        <!-- Duplicado para loop infinito -->
         <div class="short-item"><span class="emoji-big">Laptop</span><h3>Sitios Corporativos</h3><p>Profesionales, modernos y optimizados</p></div>
         <div class="short-item"><span class="emoji-big">Store</span><h3>E-commerce</h3><p>Tiendas online que convierten</p></div>
         <div class="short-item"><span class="emoji-big">Portfolio</span><h3>Portafolios Creativos</h3><p>Para artistas y freelancers</p></div>
@@ -152,39 +193,34 @@
         <div class="short-item"><span class="emoji-big">Blog</span><h3>Blogs & Revistas</h3><p>Contenido que engancha</p></div>
         <div class="short-item"><span class="emoji-big">Dashboard</span><h3>Dashboards</h3><p>Paneles administrativos intuitivos</p></div>
       </div>
-    
     </div>
   </div>
 
-
+  <!-- Puedes repetir la misma estructura para más filas -->
 </main>
 
-<!-- Scripts (estrellas + sidebar) -->
+<!-- SCRIPT PARA LOS BOTONES (añádelo justo antes de cerrar </body>) -->
 <script>
-// Script estrellas + meteoros (el mismo que ya usas)
-(function(){const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');const rootShoot=document.createElement('div');document.body.appendChild(rootShoot);rootShoot.id='shooting-root';let W=0,H=0,stars=[],raf=0,last=0,mouseX=0,mouseY=0;const COUNT=350;let running=true;let audioEnabled=true;let audioCtx=null;function resize(){W=canvas.width=Math.round(innerWidth*devicePixelRatio);H=canvas.height=Math.round(innerHeight*devicePixelRatio);canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';gen()}function gen(){stars=[];for(let i=0;i<COUNT;i++){stars.push({x:Math.random()*W,y:Math.random()*H,z:1+Math.floor(Math.random()*3),s:Math.random()*1.8+0.3,base:0.4+Math.random()*0.6,alpha:0,tw:false,twPhase:Math.random()*Math.PI*2,v:0.02+Math.random()*0.18})}}function playTwinkle(){if(!audioEnabled)return;if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator();const g=audioCtx.createGain();o.type='sine';o.frequency.value=800+Math.random()*600;g.gain.value=0.0025;o.connect(g);g.connect(audioCtx.destination);o.start();g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.08);o.stop(audioCtx.currentTime+0.09)}function createShooting(){if(!running)return;const el=document.createElement('div');el.className='shooting';const startX=Math.random()*innerWidth*0.9+10;const startY=Math.random()*innerHeight*0.35+10;const len=300+Math.random()*500;el.style.left=startX+'px';el.style.top=startY+'px';el.style.width='2px';el.style.height='2px';el.style.background='linear-gradient(90deg,#fff,rgba(255,255,255,0))';el.style.transform='rotate(-25deg)';el.style.boxShadow='0 0 12px 2px rgba(255,255,255,0.8)';rootShoot.appendChild(el);el.animate([{transform:'translateX(0) translateY(0) rotate(-25deg)',opacity:1},{transform:`translateX(${len}px) translateY(${len*0.18}px) rotate(-25deg)`,opacity:0}],[{duration:700+Math.random()*900,easing:'cubic-bezier(.2,.8,.2,1)'}]).onfinish=()=>el.remove();playTwinkle()}function draw(t){if(!running)return;if(!last)last=t;const dt=Math.min(50,t-last)/1000;last=t;ctx.clearRect(0,0,W,H);for(const s of stars){const speed=s.v*(s.z/3)*60*dt;s.x-=speed*60*0.016;if(s.x<-10)s.x=W+10;if(!s.tw&&Math.random()<0.007){s.tw=true;s.twPhase=0;playTwinkle()}if(s.tw){s.twPhase+=dt*(1+Math.random()*3);s.alpha=s.base+Math.sin(s.twPhase*6)*0.6;if(s.twPhase>1.6+Math.random()*2){s.tw=false;s.alpha=s.base}}else{s.alpha=s.base+Math.sin((t/1000+s.s)*0.2+s.twPhase)*0.06}const px=s.x+(mouseX-innerWidth/2)*0.02*(s.z/3);const py=s.y+(mouseY-innerHeight/2)*0.02*(s.z/3);const radius=Math.max(0.2,s.s*devicePixelRatio);const grd=ctx.createRadialGradient(px,py,0,px,py,radius*4);grd.addColorStop(0,`rgba(255,255,255,${Math.min(1,s.alpha)})`);grd.addColorStop(0.4,`rgba(200,220,255,${Math.min(0.6,s.alpha*0.7)})`);grd.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=grd;ctx.beginPath();ctx.arc(px,py,radius*4,0,Math.PI*2);ctx.fill()}if(Math.random()<0.0025)createShooting();raf=requestAnimationFrame(draw)}window.STAR_BG={stop(){running=false;cancelAnimationFrame(raf);ctx.clearRect(0,0,W,H);last=0;rootShoot.querySelectorAll('.shooting').forEach(n=>n.remove())},start(){if(running)return;running=true;last=0;gen();raf=requestAnimationFrame(draw)},toggleSound(on){audioEnabled=!!on;if(!audioEnabled&&audioCtx){try{audioCtx.close()}catch(e){}audioCtx=null}}};window.addEventListener('resize',()=>{clearTimeout(window._rsz);window._rsz=setTimeout(resize,150)});window.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY});resize();raf=requestAnimationFrame(draw)})();
+// Control de botones ← →
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const wrapper = btn.closest('.shorts-row').querySelector('.scroll-wrapper');
+    const track = wrapper.querySelector('.shorts-track');
+    const itemWidth = track.children[0].offsetWidth + 35; // ancho tarjeta + gap
 
-// Script del sidebar y controles
-(function(){
-  const sidebar=document.getElementById('sidebar');
-  const btnMenu=document.getElementById('btn-menu');
-  const overlay=document.getElementById('overlay');
-  const settingsToggle=document.getElementById('settings-toggle');
-  const settingsMenu=document.getElementById('settings-menu');
-  const btnAnim=document.getElementById('btn-animation');
-  const btnSound=document.getElementById('btn-sound');
+    const direction = btn.dataset.dir === 'next' ? 1 : -1;
+    const scrollAmount = itemWidth * 3 * direction; // avanza 3 tarjetas
 
-  btnMenu.addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show')});
-  overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('show')});
+    // Desactivamos temporalmente la animación para que el desplazamiento manual sea instantáneo
+    track.style.animation = 'none';
+    wrapper.scrollLeft -= scrollAmount;
 
-  settingsToggle.addEventListener('click',()=>{settingsMenu.style.display=settingsMenu.style.display==='block'?'none':'block'});
-
-  let animRunning=true;
-  btnAnim&&btnAnim.addEventListener('click',()=>{animRunning=!animRunning;btnAnim.textContent=animRunning?'Stop':'Start';animRunning?window.STAR_BG.start():window.STAR_BG.stop()});
-
-  let soundOn=true;
-  btnSound&&btnSound.addEventListener('click',()=>{soundOn=!soundOn;btnSound.textContent=soundOn?'Mute':'Unmute';window.STAR_BG.toggleSound(soundOn)});
-})();
+    // Reactivamos la animación después de un frame
+    requestAnimationFrame(() => {
+      track.style.animation = '';
+    });
+  });
+});
 </script>
 </body>
 </html>
