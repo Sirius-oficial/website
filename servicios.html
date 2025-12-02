@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
+<html lang="es" class="hydrated"><head>
+  <meta charset="UTF-8"><style data-styles="">ion-icon{visibility:hidden}.hydrated{visibility:inherit}</style>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Servicios - Sirius Diseño Web</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script nomodule="" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -52,10 +51,174 @@
     .btn{padding:8px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#eaf0ff;cursor:pointer}
     .emoji-icon{font-size:20px;color:inherit;line-height:1;display:inline-block}
   </style>
-</head>
+<style>
+      body.shimeji-pinned iframe {
+        pointer-events: none;
+      }
+      body.shimeji-select-ie {
+        cursor: cell !important;
+      }
+      #shimeji-contextMenu::-webkit-scrollbar {
+        width: 6px;
+      }
+      #shimeji-contextMenu::-webkit-scrollbar-thumb {
+        background-color: rgba(30,30,30,0.6);
+        border-radius: 3px;
+      }
+      #shimeji-contextMenu::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+        /* ==================== BOTONES RECTANGULARES PREMIUM ==================== */
+    .subtitle {
+      margin-top: 110px;
+      text-align: center;
+      font-size: 1.35rem;
+      letter-spacing: 5px;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 5rem;
+      opacity: 0.9;
+    }
+
+    .services-buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3.5rem;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .service-rect-btn {
+      position: relative;
+      display: block;
+      background: rgba(15, 20, 40, 0.85);
+      backdrop-filter: blur(14px);
+      border-radius: 24px;
+      overflow: hidden;
+      text-decoration: none;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(255, 215, 0, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .service-rect-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, 
+        rgba(100, 200, 255, 0.1) 0%, 
+        rgba(255, 215, 0, 0.05) 50%, 
+        transparent 100%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .service-rect-btn:hover::before {
+      opacity: 1;
+    }
+
+    .service-rect-btn:hover {
+      transform: translateY(-18px) scale(1.03);
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.6),
+        0 0 80px rgba(255, 215, 0, 0.35);
+      border-color: rgba(255, 215, 0, 0.4);
+    }
+
+    .btn-content {
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .emoji-big {
+      font-size: 5.8rem;
+      margin-bottom: 1.2rem;
+      display: block;
+      filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.3));
+      transition: transform 0.5s ease;
+    }
+
+    .service-rect-btn:hover .emoji-big {
+      transform: scale(1.2);
+    }
+
+    .service-rect-btn h3 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin: 0.8rem 0;
+      background: linear-gradient(90deg, #a8edea, #fed6e3, #a8edea);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .service-rect-btn p {
+      color: #b0c4de;
+      font-size: 1.15rem;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .btn-glow {
+      position: absolute;
+      inset: -2px;
+      border-radius: 24px;
+      background: conic-gradient(from 0deg at 50% 50%, 
+        transparent 0deg, 
+        #ffd700 60deg, 
+        #64c8ff 120deg, 
+        transparent 180deg);
+      opacity: 0;
+      filter: blur(18px);
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+
+    .service-rect-btn:hover .btn-glow {
+      opacity: 0.7;
+      animation: rotateGlow 12s linear infinite;
+    }
+
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .services-buttons-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .service-rect-btn:hover {
+        transform: translateY(-12px) scale(1.04);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .subtitle { 
+        margin-top: 140px; 
+        font-size: 1.1rem; 
+        letter-spacing: 3px;
+      }
+      .service-rect-btn {
+        padding: 0;
+      }
+      .btn-content {
+        padding: 2.5rem 1.5rem;
+      }
+      .emoji-big { font-size: 5rem; }
+      .service-rect-btn h3 { font-size: 1.7rem; }
+    }
+    </style><meta name="shimejiBrowserExtensionId" content="gohjpllcolmccldfdggmamodembldgpc" data-version="2.0.5"></head>
 <body>
 
-<canvas id="stars"></canvas>
+<canvas id="stars" width="962" height="613" style="width: 962px; height: 613px;"></canvas>
 <div class="nebula" aria-hidden="true"></div>
 <div id="shooting-root" aria-hidden="true"></div>
 
@@ -65,15 +228,15 @@
   </div>
 
   <nav aria-label="Principal">
-    <a href="index.html"><ion-icon name="home-outline"></ion-icon><span>INICIO</span></a>
-    <a href="sobre_nosostros.html"><ion-icon name="people-outline"></ion-icon><span>SOBRE NOSOTROS</span></a>
-    <a href="servicios.html"><ion-icon name="create-outline"></ion-icon><span>SERVICIOS</span></a>
-    <a href="contacto.html"><ion-icon name="call-outline"></ion-icon><span>CONTACTOS</span></a>
+    <a href="index.html"><ion-icon name="home-outline" role="img" class="md hydrated"></ion-icon><span>INICIO</span></a>
+    <a href="sobre_nosostros.html"><ion-icon name="people-outline" role="img" class="md hydrated"></ion-icon><span>SOBRE NOSOTROS</span></a>
+    <a href="servicios.html"><ion-icon name="create-outline" role="img" class="md hydrated"></ion-icon><span>SERVICIOS</span></a>
+    <a href="contacto.html"><ion-icon name="call-outline" role="img" class="md hydrated"></ion-icon><span>CONTACTOS</span></a>
 
     <div class="line" role="separator"></div>
 
     <div class="settings" id="settings">
-      <div class="settings-toggle" id="settings-toggle" role="button" aria-expanded="false"><ion-icon name="settings-outline"></ion-icon><span>AJUSTES</span></div>
+      <div class="settings-toggle" id="settings-toggle" role="button" aria-expanded="false"><ion-icon name="settings-outline" role="img" class="md hydrated"></ion-icon><span>AJUSTES</span></div>
       <div class="settings-menu" id="settings-menu" aria-hidden="true">
         <div class="opt"><span>Detener animación</span><button class="btn" id="btn-animation" aria-pressed="false">Stop</button></div>
         <div class="opt" style="margin-top:6px"><span>Quitar sonidos</span><button class="btn" id="btn-sound" aria-pressed="false">Mute</button></div>
@@ -82,19 +245,40 @@
   </nav>
 </aside>
 
-<div class="menu" id="btn-menu" aria-label="Abrir menú" role="button" tabindex="0"><ion-icon name="menu-outline"></ion-icon></div>
+<div class="menu" id="btn-menu" aria-label="Abrir menú" role="button" tabindex="0"><ion-icon name="menu-outline" role="img" class="md hydrated"></ion-icon></div>
 <div id="overlay" class="overlay" aria-hidden="true"></div>
 
 <main id="main" role="main">
-  <p class="subtitle">OFRECEMOS ASISTENCIA EN:</p>
+  <p class="subtitle">ELIGE TU SERVICIO ESTELAR</p>
 
-  <div class="services-grid" aria-live="polite">
-    <div class="service-card"><h2>DISEÑO GRÁFICO</h2><p>Portadas y Packaging</p></div>
-    <div class="service-card"><h2>INTERFAZ GRÁFICA</h2><p>Apps y Webs</p></div>
-    <div class="service-card"><h2>DISEÑO DE IDENTIDAD</h2><p>Mockups, logos y Branding</p></div>
+  <div class="services-buttons-grid">
+    <a href="#diseno-grafico" class="service-rect-btn" aria-label="Diseño Gráfico">
+      <div class="btn-content">
+        <span class="emoji-big">Brush</span>
+        <h3>DISEÑO GRÁFICO</h3>
+        <p>Portadas • Packaging • Ilustración • Flyers</p>
+      </div>
+      <div class="btn-glow"></div>
+    </a>
+
+    <a href="#interfaz-web" class="service-rect-btn" aria-label="Interfaz y Desarrollo Web">
+      <div class="btn-content">
+        <span class="emoji-big">Laptop</span>
+        <h3>INTERFAZ &amp; WEB</h3>
+        <p>Sitios web • Apps • UX/UI • E-commerce</p>
+      </div>
+      <div class="btn-glow"></div>
+    </a>
+
+    <a href="#branding" class="service-rect-btn" aria-label="Branding e Identidad">
+      <div class="btn-content">
+        <span class="emoji-big">Star</span>
+        <h3>BRANDING</h3>
+        <p>Logos • Identidad visual • Mockups • Manual de marca</p>
+      </div>
+      <div class="btn-glow"></div>
+    </a>
   </div>
-
- 
 </main>
 
 <script>
@@ -279,9 +463,12 @@
 
 })();
 </script>
-</body>
-</html>
 
 
+
+
+
+
+<div id="phedra-x-shadow-host" style="position: fixed; top: 0px; left: 0px; width: 0px; height: 0px; pointer-events: none; z-index: 2147483647;"></div><div id="shimeji-workArea" style="position: fixed; background: transparent; z-index: 2147483643; width: 100vw; height: 100vh; left: 0px; top: 0px; transform: translate(0px, 0px); pointer-events: none;"></div></body></html>
 
 
